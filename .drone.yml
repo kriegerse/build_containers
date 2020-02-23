@@ -23,9 +23,9 @@ steps:
     when:
       branch:
         - master
-      # event:
-        # exclude:
-          # - pull_request
+      event:
+        exclude:
+          - pull_request
 
   - name: clamav_testing
     image: plugins/docker
@@ -40,5 +40,19 @@ steps:
         - FS_BASE=clamav
     when:
       event:
-        - pull_request
         - push
+
+  - name: clamav_pr
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: kriegerse/clamav_testing
+      dockerfile: clamav/Dockerfile
+      build_args:
+        - FS_BASE=clamav
+    when:
+      event:
+        - pull_request
