@@ -21,7 +21,7 @@ steps:
       repo: kriegerse/clamav
       dockerfile: clamav/Dockerfile
       build_args:
-        - FS_BASE="clamav"
+        - FS_BASE=clamav
     when:
       branch:
         - master
@@ -32,7 +32,7 @@ steps:
     settings:
       dockerfile: clamav/Dockerfile
       build_args:
-        - FS_BASE="clamav"
+        - FS_BASE=clamav
     dry_run: true
     when:
       event:
