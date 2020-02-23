@@ -10,6 +10,7 @@ steps:
       - echo -n "builddate-$(date +%Y-%m-%d)" > .tags
       - echo -n ",build-${DRONE_BUILD_NUMBER}" >> .tags
       - echo -n ",latest" >> .tags
+      - ls -alhtr
 
   - name: clamav
     image: plugins/docker
