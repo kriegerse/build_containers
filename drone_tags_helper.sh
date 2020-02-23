@@ -10,3 +10,5 @@ else
     echo -n ",PR-${DRONE_PULL_REQUEST}" >> .tags
   fi
 fi
+
+cat ./.tags
