@@ -41,18 +41,4 @@ steps:
     when:
       event:
         - push
-
-  - name: clamav_pr
-    image: plugins/docker
-    settings:
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      repo: kriegerse/clamav_testing
-      dockerfile: clamav/Dockerfile
-      build_args:
-        - FS_BASE=clamav
-    when:
-      event:
         - pull_request
