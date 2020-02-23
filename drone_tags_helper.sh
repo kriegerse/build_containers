@@ -5,4 +5,5 @@ if [[ "${DRONE_BRANCH}" -eq "master" ]]; then
   echo -n "builddate-$(date +%Y-%m-%d)" >> .tags
 else
   echo -n "testing,build-${DRONE_BUILD_NUMBER}" > .tags
+  echo -n "branch-${DRONE_BRANCH}" >> .tags
 fi

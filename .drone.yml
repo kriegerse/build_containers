@@ -10,7 +10,7 @@ steps:
       - ls -alhtr
       - ash drone_tags_helper.sh
 
-  - name: clamav
+  - name: clamav_production
     image: plugins/docker
     settings:
       username:
@@ -29,7 +29,7 @@ steps:
   - name: clamav_testing
     image: plugins/docker
     settings:
-      dry_run: true
+      # dry_run: true
       username:
         from_secret: docker_username
       password:
