@@ -23,9 +23,6 @@ steps:
     when:
       branch:
         - master
-      event:
-        - cron
-
 
   - name: clamav_testing
     image: plugins/docker
