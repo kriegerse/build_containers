@@ -4,6 +4,11 @@ type: docker
 name: clamav
 
 steps:
+  - name: generate_tags
+    image: alpine:latest
+    commands:
+      - echo -n "date:$(date +%Y-%m-%d),build:${DRONE_BUILD_NUMBER}" > .tags
+
   - name: clamav
     image: plugins/docker
     settings:
@@ -13,8 +18,6 @@ steps:
         from_secret: docker_password
       repo: kriegerse/clamav
       tags:
-        - buildnumber-${DRONE_BUILD_NUMBER}
-        - builddate-${BUILD_DATE}
         - latest
       dockerfile: clamav/Dockerfile
       build_args:
