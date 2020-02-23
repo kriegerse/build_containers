@@ -23,6 +23,9 @@ steps:
     when:
       branch:
         - master
+      event:
+        exclude:
+          - pull_request
 
   - name: clamav_testing
     image: plugins/docker
@@ -40,6 +43,3 @@ steps:
       event:
         - pull_request
         - push
-      branch:
-        exclude:
-          - master
