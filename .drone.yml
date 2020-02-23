@@ -18,4 +18,4 @@ steps:
         - latest
       dockerfile: clamav/Dockerfile
       build_args:
-        - FS_BASE=${DRONE_STEP_NAME}
+        - FS_BASE=${DRONE_STAGE_NAME}
