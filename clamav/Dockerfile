@@ -1,12 +1,15 @@
 FROM opensuse/leap:latest
 
+# DEBUG
+RUN df -hP
+
 # Configure security repo using leap os-release
 COPY ./config_repo.sh /usr/local/bin/
 RUN bash /usr/local/bin/config_repo.sh
 
 # clamav + supervisor
 RUN zypper -n in clamav supervisor
-#RUN zypper clean --all
+RUN zypper clean --all
 
 
 # supervisord start scripts
