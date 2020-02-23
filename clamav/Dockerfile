@@ -3,7 +3,8 @@ FROM opensuse/leap:latest
 # DEBUG
 RUN df -hP
 RUN pwd
-RUN ls -alhtr 
+RUN ls -alhtr
+RUN env
 
 # Configure security repo using leap os-release
 COPY ./config_repo.sh /usr/local/bin/
