@@ -1,6 +1,5 @@
-ARG FS_BASE=''
-
 FROM opensuse/leap:latest
+ARG FS_BASE=''
 
 # Configure security repo using leap os-release
 COPY ./${FS_BASE}/config_repo.sh /usr/local/bin/
