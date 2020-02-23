@@ -23,14 +23,13 @@ steps:
     when:
       branch:
         - master
-      event:
-        exclude:
-          - pull_request
+      # event:
+        # exclude:
+          # - pull_request
 
   - name: clamav_testing
     image: plugins/docker
     settings:
-      # dry_run: true
       username:
         from_secret: docker_username
       password:
