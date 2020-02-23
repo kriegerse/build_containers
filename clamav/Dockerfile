@@ -1,3 +1,5 @@
+ARG FS_BASE=''
+
 FROM opensuse/leap:latest
 
 # DEBUG
@@ -7,7 +9,7 @@ RUN ls -alhtr
 RUN env
 
 # Configure security repo using leap os-release
-COPY ./clamav/config_repo.sh /usr/local/bin/
+COPY ./${FS_BASE}/config_repo.sh /usr/local/bin/
 RUN bash /usr/local/bin/config_repo.sh
 
 # clamav + supervisor

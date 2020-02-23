@@ -17,3 +17,5 @@ steps:
         - builddate-${BUILD_DATE}
         - latest
       dockerfile: clamav/Dockerfile
+      build_args:
+        - FS_BASE=${DRONE_STEP_NAME}
