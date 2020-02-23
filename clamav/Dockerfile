@@ -10,9 +10,9 @@ RUN zypper -n in clamav supervisor
 RUN zypper clean --all
 
 # supervisord start scripts
-COPY ./supervisord/supervisord.conf /etc/supervisord.conf
-COPY ./supervisord/clamav.conf /etc/supervisord.d/.
-COPY ./start_clam.sh /usr/local/bin/
+COPY ./${FS_BASE}/supervisord/supervisord.conf /etc/supervisord.conf
+COPY ./${FS_BASE}/supervisord/clamav.conf /etc/supervisord.d/.
+COPY ./${FS_BASE}/start_clam.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start_clam.sh
 
 # change signature dir to /data/db, add /data/conf for individual user configs
