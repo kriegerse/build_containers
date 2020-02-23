@@ -6,8 +6,8 @@ name: clamav
 steps:
   - name: generate_tags
     image: alpine:latest
-    commands: |
-      -
+    commands:
+      - >
       echo -n "builddate-$(date +%Y-%m-%d),
       build-${DRONE_BUILD_NUMBER}" > .tags
 
