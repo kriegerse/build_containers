@@ -7,8 +7,8 @@ steps:
   - name: generate_tags
     image: alpine:latest
     commands:
-      - ls -alhtr
       - ash drone_tags_helper.sh
+      - cat .tags
 
   - name: clamav_production
     image: plugins/docker
