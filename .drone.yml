@@ -26,18 +26,18 @@ steps:
         - master
 
 
-  - name: clamav_eval
+  - name: clamav_testing
     image: plugins/docker
     settings:
+      dry_run: true
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      repo: kriegerse/clamav
+      repo: kriegerse/clamav_testing
       dockerfile: clamav/Dockerfile
       build_args:
         - FS_BASE=clamav
-    dry_run: true
     when:
       event:
         - pull_request
