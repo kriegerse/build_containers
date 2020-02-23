@@ -24,7 +24,6 @@ steps:
       branch:
         - master
 
-
   - name: clamav_testing
     image: plugins/docker
     settings:
