@@ -9,6 +9,7 @@ steps:
     commands:
       - echo -n "builddate-$(date +%Y-%m-%d)" > .tags
       - echo -n ",build-${DRONE_BUILD_NUMBER}" >> .tags
+      - echo -n ",latest" >> .tags
 
   - name: clamav
     image: plugins/docker
@@ -18,8 +19,25 @@ steps:
       password:
         from_secret: docker_password
       repo: kriegerse/clamav
-      tags:
-        - latest
       dockerfile: clamav/Dockerfile
       build_args:
-        - FS_BASE=${DRONE_STAGE_NAME}
+        - FS_BASE="clamav"
+    when:
+      branch:
+        - master
+
+
+  - name: clamav_eval
+    image: plugins/docker
+    settings:
+      dockerfile: clamav/Dockerfile
+      build_args:
+        - FS_BASE="clamav"
+    dry_run: true
+    when:
+      event:
+        - pull_request
+        - push
+      branch:
+        exclude:
+          - master
