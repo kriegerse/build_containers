@@ -25,21 +25,27 @@ steps:
       branch:
         - master
       event:
+        include:
+          - cron
         exclude:
           - pull_request
 
   # build + push image to docker testing (for eval)
-  - name: clamav_testing
+  - name: clamav_stage
     image: plugins/docker
     settings:
+      #launch_debug: true
+      #debug: true
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      repo: kriegerse/clamav_stage
+      #registry: docker.com
+      repo: kriegerse/clamav-stage
       dockerfile: clamav/Dockerfile
       build_args:
         - FS_BASE=clamav
+      force_tag: true
     when:
       event:
         - pull_request
@@ -53,10 +59,14 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      repo: kriegerse/clamav_stage
+      repo: kriegerse/clamav-stage
       dockerfile: clamav/Dockerfile
       build_args:
         - FS_BASE=clamav
+      force_tag: true
     when:
       event:
         - push
+      branch:
+        exclude:
+          - master
