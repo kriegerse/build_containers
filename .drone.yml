@@ -5,9 +5,9 @@ name: clamav
 
 steps:
   - name: generate_tags
-    image: alpine:latest
+    image: ubuntu:latest
     commands:
-      - ash drone_tags_helper.sh
+      - bash drone_tags_helper.sh
 
   # build + push image to docker testing (for eval)
   - name: clamav_stage

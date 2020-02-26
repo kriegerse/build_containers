@@ -1,4 +1,4 @@
-#!/usr/bin/env ash
+#!/usr/bin/env bash
 
 
 if [[ "${DRONE_BRANCH}" == "master" && ${DRONE_PULL_REQUEST} == "" ]]; then
