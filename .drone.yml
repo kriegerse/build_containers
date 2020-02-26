@@ -27,6 +27,7 @@ steps:
       event:
         include:
           - cron
+          - push
         exclude:
           - pull_request
 
@@ -34,13 +35,10 @@ steps:
   - name: clamav_stage
     image: plugins/docker
     settings:
-      #launch_debug: true
-      #debug: true
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      #registry: docker.com
       repo: kriegerse/clamav-stage
       dockerfile: clamav/Dockerfile
       build_args:
@@ -59,7 +57,7 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      repo: kriegerse/clamav-stage
+      repo: kriegerse/clamav-dev
       dockerfile: clamav/Dockerfile
       build_args:
         - FS_BASE=clamav
