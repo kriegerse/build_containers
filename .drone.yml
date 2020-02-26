@@ -47,23 +47,23 @@ steps:
       event:
         - pull_request
 
-  # build image but do not push (for testing)
-  - name: clamav_dev
-    image: plugins/docker
-    settings:
-      dry_run: true
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      repo: kriegerse/clamav-dev
-      dockerfile: clamav/Dockerfile
-      build_args:
-        - FS_BASE=clamav
-      force_tag: true
-    when:
-      event:
-        - push
-      branch:
-        exclude:
-          - master
+  # # build image but do not push (for testing)
+  # - name: clamav_dev
+  #   image: plugins/docker
+  #   settings:
+  #     dry_run: true
+  #     username:
+  #       from_secret: docker_username
+  #     password:
+  #       from_secret: docker_password
+  #     repo: kriegerse/clamav-dev
+  #     dockerfile: clamav/Dockerfile
+  #     build_args:
+  #       - FS_BASE=clamav
+  #     force_tag: true
+  #   when:
+  #     event:
+  #       - push
+  #     branch:
+  #       exclude:
+  #         - master
