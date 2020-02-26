@@ -35,6 +35,7 @@ steps:
   - name: clamav_stage
     image: plugins/docker
     settings:
+      dry_run: true
       username:
         from_secret: docker_username
       password:
