@@ -7,11 +7,10 @@ steps:
   - name: generate_tags
     image: alpine:latest
     commands:
-      - echo -n "builddate-$(date +%Y-%m-%d)" > .tags
-      - echo -n ",build-${DRONE_BUILD_NUMBER}" >> .tags
-      - echo -n ",latest" >> .tags
+      - ash drone_tags_helper.sh
 
-  - name: clamav
+  # build + push image to docker production
+  - name: clamav_production
     image: plugins/docker
     settings:
       username:
@@ -25,19 +24,39 @@ steps:
     when:
       branch:
         - master
+      event:
+        exclude:
+          - pull_request
 
-
-  - name: clamav_eval
+  # build + push image to docker testing (for eval)
+  - name: clamav_testing
     image: plugins/docker
     settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: kriegerse/clamav_stage
       dockerfile: clamav/Dockerfile
       build_args:
         - FS_BASE=clamav
-    dry_run: true
     when:
       event:
         - pull_request
+
+  # build image but do not push (for testing)
+  - name: clamav_dev
+    image: plugins/docker
+    settings:
+      dry_run: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: kriegerse/clamav_stage
+      dockerfile: clamav/Dockerfile
+      build_args:
+        - FS_BASE=clamav
+    when:
+      event:
         - push
-      branch:
-        exclude:
-          - master
