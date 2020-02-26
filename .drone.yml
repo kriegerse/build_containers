@@ -25,6 +25,8 @@ steps:
       branch:
         - master
       event:
+        include:
+          - cron
         exclude:
           - pull_request
 
