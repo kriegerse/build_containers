@@ -18,9 +18,7 @@ steps:
       password:
         from_secret: docker_password
       repo: kriegerse/clamav-stage
-      # dockerfile: clamav/Dockerfile
-      dockerfile:
-        from_secret: docker_username
+      dockerfile: clamav/Dockerfile
       build_args:
         - FS_BASE=clamav
     when:
