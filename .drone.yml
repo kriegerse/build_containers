@@ -40,6 +40,7 @@ steps:
       dockerfile: clamav/Dockerfile
       build_args:
         - FS_BASE=clamav
+      force_tag: true
     when:
       event:
         - pull_request
@@ -57,6 +58,7 @@ steps:
       dockerfile: clamav/Dockerfile
       build_args:
         - FS_BASE=clamav
+      force_tag: true
     when:
       event:
         - push
