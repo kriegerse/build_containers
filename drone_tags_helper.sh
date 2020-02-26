@@ -1,7 +1,7 @@
 #!/usr/bin/env ash
 
 
-if [[ "${DRONE_BRANCH}" == "master" ]]; then
+if [[ "${DRONE_BRANCH}" == "master" && ${DRONE_PULL_REQUEST} == "" ]]; then
   echo -n "latest" > .tags
   echo -n ",stable" >> .tags
   echo -n ",builddate-$(date +%Y-%m-%d)" >> .tags
