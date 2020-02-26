@@ -32,7 +32,7 @@ steps:
   - name: clamav_stage
     image: plugins/docker
     settings:
-      target: debug
+      debug: true
       username:
         from_secret: docker_username
       password:
