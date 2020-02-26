@@ -32,11 +32,13 @@ steps:
   - name: clamav_stage
     image: plugins/docker
     settings:
+      #launch_debug: true
+      #debug: true
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      registry: docker.com
+      #registry: docker.com
       repo: kriegerse/clamav-stage
       dockerfile: clamav/Dockerfile
       build_args:
