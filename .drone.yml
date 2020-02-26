@@ -13,8 +13,8 @@ steps:
   - name: clamav_stage
     image: plugins/docker
     settings:
-      # username:
-      #   from_secret: docker_username
+      username:
+        from_secret: docker_username
       # password:
       #   from_secret: docker_password
       repo: kriegerse/clamav-stage
