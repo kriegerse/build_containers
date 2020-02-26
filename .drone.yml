@@ -29,7 +29,7 @@ steps:
           - pull_request
 
   # build + push image to docker testing (for eval)
-  - name: clamav_testing
+  - name: clamav_stage
     image: plugins/docker
     settings:
       username:
@@ -60,3 +60,6 @@ steps:
     when:
       event:
         - push
+      branch:
+        exclude:
+          - master
