@@ -14,8 +14,6 @@ before_script:
 build:
   stage: build
   script:
-    - cat /etc/resolv.conf
-    - nslookup download.opensuse.org
     - docker build --network host -f clamav/Dockerfile
       --build-arg FS_BASE=clamav
       -t clamav-stage:latest .
