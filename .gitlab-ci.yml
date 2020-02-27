@@ -1,0 +1,18 @@
+---
+image: docker:latest
+services:
+  - docker:dind
+
+stages:
+  - build
+#  - test
+#  - release
+
+before_script:
+  - docker login -u ${docker_username} -p ${docker_password}
+
+build:
+  stage: build
+  script:
+    - docker build --pull clamav/Dockerfile
+    # - docker push $TEST_IMAGE
