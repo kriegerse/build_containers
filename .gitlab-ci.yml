@@ -9,11 +9,12 @@ stages:
 #  - release
 
 before_script:
-  - docker info
   - docker login -u $docker_username -p "$docker_password" $docker_registry
 
 build:
   stage: build
   script:
-    - docker build --pull clamav/Dockerfile
+    - ls -alhtr
+    - pwd
+    # - docker build --pull clamav/Dockerfile
     # - docker push $TEST_IMAGE
