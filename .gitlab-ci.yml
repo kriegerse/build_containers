@@ -17,7 +17,8 @@ build:
     - docker info
     - cat /etc/resolv.conf
     - nslookup download.opensuse.org ; true
-    - nslookup google.de 8.8.8.8 ; true
+    - nslookup download.opensuse.org 8.8.8.8 ; true
+    - sed -i -e 's/^nameserver.*$/nameserver 8.8.8.8/g' /etc/resolv.conf
     - docker build -f clamav/Dockerfile --build-arg FS_BASE=clamav
       -t clamav-stage:latest . ; true
     - docker push clamav-stage:gitlabtest ; true
