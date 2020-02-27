@@ -20,7 +20,7 @@ build:
     - docker build --network host -f clamav/Dockerfile
       --build-arg FS_BASE=clamav
       -t clamav-stage:gitlabtest .
-    - docker push clamav-stage:gitlabtest
+    - docker push $docker_username/clamav-stage:gitlabtest
 
     # - docker build --pull clamav/Dockerfile
     # - docker push $TEST_IMAGE
