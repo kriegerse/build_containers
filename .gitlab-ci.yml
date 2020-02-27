@@ -15,11 +15,11 @@ build:
   stage: build
   script:
     - docker info
-    - env
     - cat /etc/resolv.conf
     - nc -nvz -w 5 1.1.1.1 53
     - nslookup download.opensuse.org 1.1.1.1
-    # - sed -i -e 's/^nameserver.*$/nameserver 1.1.1.1/g' /etc/resolv.conf
+    - sed -i -e 's/^nameserver.*$/nameserver 1.1.1.1/g' /etc/resolv.conf
+    - nslookup download.opensuse.org
     # - docker build -f clamav/Dockerfile --build-arg FS_BASE=clamav
     #  -t clamav-stage:latest . ; true
     # - docker push clamav-stage:gitlabtest ; true
