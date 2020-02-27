@@ -9,7 +9,7 @@ stages:
 #  - release
 
 before_script:
-  - docker login -u ${docker_username} -p ${docker_password}
+  - docker login -u $docker_username -p $docker_password
 
 build:
   stage: build
