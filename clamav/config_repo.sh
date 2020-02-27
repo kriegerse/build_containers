@@ -2,6 +2,16 @@
 
 set -x
 
+cat /etc/resolv.conf
+
+nslookup download.opensuse.org
+nslookup google.de
+
+nslookup download.opensuse.org 1.1.1.1
+nslookup google.de 1.1.1.1
+
+
+
 # get OS release info
 source /etc/os-release
 
