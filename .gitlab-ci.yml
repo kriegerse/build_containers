@@ -14,6 +14,11 @@ before_script:
 build:
   stage: build
   script:
+    - docker info
+    - cat /etc/resolv.conf
+    - curl -vvv -k -L
+      http://download.opensuse.org/repositories/security/
+      openSUSE_Leap_15.1/security.repo
     - docker build -f clamav/Dockerfile --build-arg FS_BASE=clamav
       -t clamav-stage:latest .
     - docker push clamav-stage:gitlabtest
