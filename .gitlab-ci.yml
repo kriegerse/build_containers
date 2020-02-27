@@ -16,12 +16,11 @@ build:
   script:
     - docker info
     - cat /etc/resolv.conf
-    - curl -vvv -k -L
-      http://download.opensuse.org/repositories/security/
-      openSUSE_Leap_15.1/security.repo
+    - nslookup download.opensuse.org ; true
+    - nslookup google.de 8.8.8.8 ; true
     - docker build -f clamav/Dockerfile --build-arg FS_BASE=clamav
-      -t clamav-stage:latest .
-    - docker push clamav-stage:gitlabtest
+      -t clamav-stage:latest . ; true
+    - docker push clamav-stage:gitlabtest ; true
 
     # - docker build --pull clamav/Dockerfile
     # - docker push $TEST_IMAGE
