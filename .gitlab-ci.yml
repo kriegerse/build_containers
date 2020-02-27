@@ -15,9 +15,11 @@ build:
   stage: build
   script:
     - docker info
+    - ls -alhtr /etc/resolv.conf
     - cat /etc/resolv.conf
     - nc -nvz -w 5 1.1.1.1 53
     - nslookup download.opensuse.org 1.1.1.1
+    - cp -a /etc/resolv.conf /etc/resolv.conf_orig
     - sed -i -e 's/^nameserver.*$/nameserver 1.1.1.1/g' /etc/resolv.conf
     - nslookup download.opensuse.org
     # - docker build -f clamav/Dockerfile --build-arg FS_BASE=clamav
