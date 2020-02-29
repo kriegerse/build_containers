@@ -2,7 +2,8 @@
 prepare-clamav:
   stage: prepare
   script:
-    - echo -n "VAL1" > /tmp/art1
+    - mkdir tmp
+    - echo -n "VAL1" > tmp/art1
   artifacts:
     expire_in: 1h
     paths:
