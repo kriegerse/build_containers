@@ -1,0 +1,23 @@
+# docker: clamav --------------------------------------------------------------#
+build-clamv:
+  stage: build
+  script:
+    - docker build --network host -f clamav/Dockerfile
+      --build-arg FS_BASE=clamav
+      -t $docker_username/clamav-stage:gitlabtest .
+    - docker push $docker_username/clamav-stage:gitlabtest
+  only:
+    changes:
+      - clamav/*
+
+test-clamav:
+  stage: test
+
+
+
+publish-clamav:
+  stage: publish
+  script:
+      - docker pull
+#     - docker image ls
+#     - docker image ls $docker_username/clamav-stage:gitlabtest
