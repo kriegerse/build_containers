@@ -4,5 +4,5 @@
 source /etc/os-release
 
 # add security repository and import keys
-zypper ar http://download.opensuse.org/repositories/security/openSUSE_Leap_${VERSION_ID}/security.repo
-zypper --gpg-auto-import-keys refresh
+zypper -vvv --non-interactive ar http://download.opensuse.org/repositories/security/openSUSE_Leap_${VERSION_ID}/security.repo
+zypper -vvv --gpg-auto-import-keys --non-interactive refresh

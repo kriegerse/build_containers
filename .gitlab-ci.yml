@@ -1,0 +1,30 @@
+---
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - prepare
+  - build
+  - test
+  - publish
+
+before_script:
+  - docker login -u $docker_username -p "$docker_password" $docker_registry
+
+include:
+  - local: '/clamav/gitlab-clamav.yml'
+
+
+prepare-build-info:
+  stage: prepare
+  script:
+    - apk add bash
+    - bash generate_build_info.sh > build_info.sh
+  artifacts:
+    expire_in: 1h
+    paths:
+      - build_info.sh
