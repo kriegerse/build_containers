@@ -17,3 +17,13 @@ before_script:
 
 include:
   - local: '/clamav/gitlab-clamav.yml'
+
+
+prepare-build-info:
+  stage: prepare
+  script:
+    - bash generate_build_info.sh > build_info.sh
+  artifacts:
+    expire_in: 1h
+    paths:
+      - build_info.sh
