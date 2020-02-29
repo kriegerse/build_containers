@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-export TEST1="TESTVAL1"
+echo "export TEST1=TESTVAL1"
 
 
 
