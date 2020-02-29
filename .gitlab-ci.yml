@@ -22,12 +22,14 @@ build-image:
       --build-arg FS_BASE=clamav
       -t $docker_username/clamav-stage:gitlabtest .
     - docker image ls
+    - docker push $docker_username/clamav-stage:gitlabtest
     # - docker push $docker_username/clamav-stage:gitlabtest
 
     # - docker build --pull clamav/Dockerfile
     # - docker push $TEST_IMAGE
 
-push-image:
-  stage: publish
-  script:
-    - docker image ls $docker_username/clamav-stage:gitlabtest
+# push-image:
+#   stage: publish
+#   script:
+#     - docker image ls
+#     - docker image ls $docker_username/clamav-stage:gitlabtest
