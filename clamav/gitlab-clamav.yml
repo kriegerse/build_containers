@@ -6,7 +6,7 @@ prepare-clamav:
   artifacts:
     expire_in: 1h
     paths:
-      - /tmp/
+      - tmp/
 
 check_prepare:
   stage: build
