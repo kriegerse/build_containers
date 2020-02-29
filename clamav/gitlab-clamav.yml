@@ -4,6 +4,7 @@ prepare-clamav:
   script:
     - mkdir tmp
     - echo -n "VAL1" > tmp/art1
+    - echo "export VAR2=VAL2" > tmp/art2
   artifacts:
     expire_in: 1h
     paths:
@@ -12,9 +13,12 @@ prepare-clamav:
 check_prepare:
   stage: build
   variables:
-    VAR1: $(cat /tmp/art1)
+    VAR1: $(cat tmp/art1)
   script:
+    - source tmp/art2
     - echo $VAR1
+    - echo $VAR2
+
 
 # build-clamv:
 #   stage: build
