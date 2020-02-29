@@ -9,8 +9,6 @@ prepare-clamav:
       - tmp/
 
 check_prepare:
-  services:
-    - docker:dind
   stage: build
   variables:
     VAR1: $(cat /tmp/art1)
