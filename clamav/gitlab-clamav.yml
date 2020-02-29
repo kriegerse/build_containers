@@ -1,14 +1,31 @@
 ---
-build-clamv:
-  stage: build
+prepare-clamav:
+  stage: prepare
+  image: opensuse/leap:latest
   script:
-    - docker build --network host -f clamav/Dockerfile
-      --build-arg FS_BASE=clamav
-      -t $docker_username/clamav-stage:gitlabtest .
-    - docker push $docker_username/clamav-stage:gitlabtest
-  only:
-    changes:
-      - clamav/*
+    - echo -n "VAL1" > /tmp/art1
+  artifacts:
+    expire_in: 4h
+    paths: /tmp
+
+check_prepare:
+  stage: build
+  image: opensuse/leap:latest
+  variables:
+    VAR1: $(cat /tmp/art1)
+  script:
+    - echo $VAR1
+
+# build-clamv:
+#   stage: build
+#   script:
+#     - docker build --network host -f clamav/Dockerfile
+#       --build-arg FS_BASE=clamav
+#       -t $docker_username/clamav-stage:gitlabtest .
+#     - docker push $docker_username/clamav-stage:gitlabtest
+#   only:
+#     changes:
+#       - clamav/*
 
 # test-clamav:
 #  stage: test
