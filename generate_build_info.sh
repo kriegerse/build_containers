@@ -12,10 +12,10 @@ ${CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME} == "master" ]]; then
 fi
 
 # print out for source file
-echo "RELEASE_PRIMARY_TAG=\"${RELEASE_PRIMARY_TAG}\""
-echo "RELEASE_SECONDARY_TAGS=\"${RELEASE_SECONDARY_TAGS}\""
-echo "BUILD_PRIMARY_TAG=\"${BUILD_PRIMARY_TAG}\""
-echo "BUILD_SECONDARY_TAGS=\"${BUILD_SECONDARY_TAGS}\""
+echo "export RELEASE_PRIMARY_TAG=\"${RELEASE_PRIMARY_TAG}\""
+echo "export RELEASE_SECONDARY_TAGS=\"${RELEASE_SECONDARY_TAGS}\""
+echo "export BUILD_PRIMARY_TAG=\"${BUILD_PRIMARY_TAG}\""
+echo "export BUILD_SECONDARY_TAGS=\"${BUILD_SECONDARY_TAGS}\""
 
 
 # on normal commit in github to working brnach

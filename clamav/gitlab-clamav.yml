@@ -2,6 +2,7 @@
 check_prepare:
   stage: build
   script:
+    - source build_info.sh
     - env
 
 
@@ -17,7 +18,6 @@ build-clamv:
     changes:
       - clamav/*
 
-
 test-clamav:
   stage: test
   script:
@@ -25,6 +25,11 @@ test-clamav:
   only:
     changes:
       - clamav/*
+
+
+
+# test-clamav:
+#  stage: test
 
 # publish-clamav:
 #   stage: publish
