@@ -1,7 +1,6 @@
 ---
 prepare-clamav:
   stage: prepare
-  image: opensuse/leap:latest
   script:
     - echo -n "VAL1" > /tmp/art1
   artifacts:
@@ -11,7 +10,6 @@ prepare-clamav:
 
 check_prepare:
   stage: build
-  image: opensuse/leap:latest
   variables:
     VAR1: $(cat /tmp/art1)
   script:
