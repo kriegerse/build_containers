@@ -1,4 +1,4 @@
-# docker: clamav --------------------------------------------------------------#
+---
 build-clamv:
   stage: build
   script:
@@ -10,14 +10,13 @@ build-clamv:
     changes:
       - clamav/*
 
-test-clamav:
-  stage: test
+# test-clamav:
+#  stage: test
 
 
-
-publish-clamav:
-  stage: publish
-  script:
-      - docker pull
+# publish-clamav:
+#   stage: publish
+#   script:
+#     - docker pull
 #     - docker image ls
 #     - docker image ls $docker_username/clamav-stage:gitlabtest
