@@ -14,14 +14,19 @@ stages:
 before_script:
   - docker login -u $docker_username -p "$docker_password" $docker_registry
 
-build:
+build-image:
   stage: build
   script:
     - docker build --network host -f clamav/Dockerfile
       --build-arg FS_BASE=clamav
-      -t clamav-stage:gitlabtest .
+      -t $docker_username/clamav-stage:gitlabtest .
     - docker image ls
     # - docker push $docker_username/clamav-stage:gitlabtest
 
     # - docker build --pull clamav/Dockerfile
     # - docker push $TEST_IMAGE
+
+push-image:
+  stage: build
+  script:
+    - docker image ls $docker_username/clamav-stage:gitlabtest
