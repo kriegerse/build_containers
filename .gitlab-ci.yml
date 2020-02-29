@@ -8,8 +8,9 @@ variables:
 
 stages:
   - build
-#  - test
-#  - release
+  - publish
+# - test
+# - release
 
 before_script:
   - docker login -u $docker_username -p "$docker_password" $docker_registry
@@ -27,6 +28,6 @@ build-image:
     # - docker push $TEST_IMAGE
 
 push-image:
-  stage: build
+  stage: publish
   script:
     - docker image ls $docker_username/clamav-stage:gitlabtest
