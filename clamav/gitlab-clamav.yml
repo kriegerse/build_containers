@@ -5,20 +5,22 @@ check_prepare:
     - source build_info.sh
     - env
 
-# build-clamv:
-#   stage: build
-#   script:
-#     - docker build --network host -f clamav/Dockerfile
-#       --build-arg FS_BASE=clamav
-#       -t $docker_username/clamav-stage:gitlabtest .
-#     - docker push $docker_username/clamav-stage:gitlabtest
-#   only:
-#     changes:
-#       - clamav/*
+
+build-clamv:
+  stage: build
+  script:
+    - source build_info.sh
+    - docker build --network host -f clamav/Dockerfile
+      --build-arg FS_BASE=clamav
+      -t $docker_username/clamav-stage:$BUILD_PRIMARY_TAG .
+    - docker push $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+  only:
+    changes:
+      - clamav/*
+
 
 # test-clamav:
 #  stage: test
-
 
 # publish-clamav:
 #   stage: publish
