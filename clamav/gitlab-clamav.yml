@@ -2,12 +2,8 @@
 check_prepare:
   stage: build
   script:
-    - env
     - source build_info.sh
-    - echo "==== $TEST1 ===="
-    - echo env after test1
     - env
-
 
 # build-clamv:
 #   stage: build
