@@ -22,6 +22,7 @@ include:
 prepare-build-info:
   stage: prepare
   script:
+    - apk add bash
     - bash generate_build_info.sh > build_info.sh
   artifacts:
     expire_in: 1h
