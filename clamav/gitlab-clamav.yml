@@ -31,6 +31,10 @@ test-clamav:
     - docker port clamav-stage_$BUILD_PRIMARY_TAG 3310/tcp
     - netstat -tulpn
     - which nc
+    - ip a
+    - export docker_port=$(docker port clamav-stage_$BUILD_PRIMARY_TAG
+      3310/tcp | cut -d ':' -f 2)
+    - echo 'PING' | nc 127.0.0.1 $docker_port
   only:
     changes:
       - clamav/*
