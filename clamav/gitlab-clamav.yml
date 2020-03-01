@@ -8,10 +8,10 @@ build-clamv:
       -t $docker_username/clamav-stage:$BUILD_PRIMARY_TAG .
     - docker push $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
     - docker image ls
-    # - for i in $BUILD_SECONDARY_TAGS ; do
-    #     docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG \
-    #     $docker_username/clamav-stage:$i ;
-    #   done
+    - for i in $BUILD_SECONDARY_TAGS ; do
+        docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+        $docker_username/clamav-stage:$i
+        docker push $docker_username/clamav-stage:$i ; done
   only:
     changes:
       - clamav/*
