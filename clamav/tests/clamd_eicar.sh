@@ -18,7 +18,7 @@ echo "* Docker: waiting for clamd port ready"
 count=0
 while [ $count -lt 60 ]; do
   count=$(( $count + 1 ))
-  docker exec -it clamav-stage_$BUILD_PRIMARY_TAG  supervisorctl status 
+  docker exec -i clamav-stage_$BUILD_PRIMARY_TAG  supervisorctl status 
   echo "PING" | nc 127.0.0.1 ${clamd_map_port}
   sleep 10
 done
