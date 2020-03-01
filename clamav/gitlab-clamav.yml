@@ -25,16 +25,6 @@ test-clamav:
   script:
     # - source build_info.sh
     - apk add bash
-    - docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-    - docker run -d -P --name clamav-stage_$BUILD_PRIMARY_TAG
-      $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-    - docker ps -a
-    - docker port clamav-stage_$BUILD_PRIMARY_TAG 3310/tcp
-    - netstat -tulpn
-    - which nc
-    - ip a
-    - export docker_port=$(docker port clamav-stage_$BUILD_PRIMARY_TAG
-      3310/tcp | cut -d ':' -f 2)
     - bash clamav/tests/clamd_eicar.sh
   only:
     changes:
