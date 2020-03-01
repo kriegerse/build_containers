@@ -29,6 +29,7 @@ test-clamav:
   only:
     changes:
       - clamav/*
+      - clamav/**/*
 
 
 # test-clamav:
