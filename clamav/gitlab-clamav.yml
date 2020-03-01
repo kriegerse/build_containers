@@ -20,11 +20,13 @@ test-clamav:
   stage: test
   services:
     - docker:dind
-    - kriegerse/clamav-stage:$CI_COMMIT_SHORT_SHA
   script:
     - source build_info.sh
-    - env
+    - docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+    - docker run -d -P --name clamav-stage_$BUILD_PRIMARY_TAG
+      $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
     - docker ps -a
+    - docker port clamav-stage_$BUILD_PRIMARY_TAG 3310/tcp
   only:
     changes:
       - clamav/*

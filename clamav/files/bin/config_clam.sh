@@ -17,6 +17,7 @@ install -D -d -o vscan -g vscan -m 750 /data/db
 install -D -d -o vscan -g vscan -m 750 /data/conf
 sed -i -e 's|^#DatabaseDirectory|DatabaseDirectory|' /etc/clamd.conf /etc/freshclam.conf
 sed -i -e 's|^DatabaseDirectory.*$|DatabaseDirectory /data/db|' /etc/clamd.conf /etc/freshclam.conf
+sed -i -e 's|\(^TCPAddr.*$\)|#\1|g' /etc/clamd.conf
 
 # configure supervisord
 ln -sf /usr/local/etc/supervisord.conf /etc/supervisord.conf
