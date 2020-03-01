@@ -29,6 +29,8 @@ test-clamav:
       $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
     - docker ps -a
     - docker port clamav-stage_$BUILD_PRIMARY_TAG 3310/tcp
+    - netstat -tulpn
+    - which nc
   only:
     changes:
       - clamav/*
@@ -36,7 +38,6 @@ test-clamav:
 
 # test-clamav:
 #  stage: test
-commit-6dad18c5
 # publish-clamav:
 #   stage: publish
 #   script:
