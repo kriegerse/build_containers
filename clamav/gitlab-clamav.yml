@@ -1,27 +1,29 @@
 ---
-build-clamv:
-  stage: build
-  script:
-    - source build_info.sh
-    - docker build --network host -f clamav/Dockerfile
-      --build-arg FS_BASE=clamav
-      -t $docker_username/clamav-stage:$BUILD_PRIMARY_TAG .
-    - docker push $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-    - docker image ls
-    - for i in $BUILD_SECONDARY_TAGS ; do
-        docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-        $docker_username/clamav-stage:$i ;
-        docker push $docker_username/clamav-stage:$i ; done
-  only:
-    changes:
-      - clamav/*
+# build-clamv:
+#   stage: build
+#   script:
+#     - source build_info.sh
+#     - docker build --network host -f clamav/Dockerfile
+#       --build-arg FS_BASE=clamav
+#       -t $docker_username/clamav-stage:$BUILD_PRIMARY_TAG .
+#     - docker push $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+#     - docker image ls
+#     - for i in $BUILD_SECONDARY_TAGS ; do
+#         docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+#         $docker_username/clamav-stage:$i ;
+#         docker push $docker_username/clamav-stage:$i ; done
+#   only:
+#     changes:
+#       - clamav/*
 
 test-clamav:
   stage: test
   services:
     - docker:dind
+  variables:
+    BUILD_PRIMARY_TAG: commit-6dad18c5
   script:
-    - source build_info.sh
+    # - source build_info.sh
     - docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
     - docker run -d -P --name clamav-stage_$BUILD_PRIMARY_TAG
       $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
@@ -34,7 +36,7 @@ test-clamav:
 
 # test-clamav:
 #  stage: test
-
+commit-6dad18c5
 # publish-clamav:
 #   stage: publish
 #   script:
