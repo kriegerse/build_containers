@@ -14,14 +14,22 @@ build-clamv:
       --build-arg FS_BASE=clamav
       -t $docker_username/clamav-stage:$BUILD_PRIMARY_TAG .
     - docker push $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+    - for i in $BUILD_SECONDARY_TAGS ; do
+        docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG \
+        $docker_username/clamav-stage:$i
+      done
   only:
     changes:
       - clamav/*
 
 test-clamav:
   stage: test
+  services:
+    - docker:dind
+    - kriegerse/clamav-stage:$CI_COMMIT_SHORT_SHA
   script:
     - source build_info.sh
+    - env
   only:
     changes:
       - clamav/*
