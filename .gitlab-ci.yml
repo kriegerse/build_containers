@@ -1,7 +1,8 @@
 ---
 image: docker:latest
 services:
-  - docker:dind
+  - name: docker:dind
+    alias: dind-service
 
 variables:
   DOCKER_DRIVER: overlay2

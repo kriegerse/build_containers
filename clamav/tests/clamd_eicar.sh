@@ -21,11 +21,15 @@ hostname
 docker info
 
 count=0
-while [ $count -lt 60 ]; do
+while [ $count -lt 6 ]; do
   count=$(( $count + 1 ))
   docker exec -i clamav-stage_$BUILD_PRIMARY_TAG  supervisorctl status
+  echo "PING localhost"
   echo "PING" | nc localhost ${clamd_map_port}
+  echo "PING $HOSTNAME"
   echo "PING" | nc $HOSTNAME ${clamd_map_port}
+  echo "PING dind-service"
+  echo "PING" | nc dind-service ${clamd_map_port}
   sleep 10
 done
 
