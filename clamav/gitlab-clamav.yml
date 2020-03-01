@@ -24,6 +24,7 @@ test-clamav:
     BUILD_PRIMARY_TAG: commit-6dad18c5
   script:
     # - source build_info.sh
+    - apk add bash
     - docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
     - docker run -d -P --name clamav-stage_$BUILD_PRIMARY_TAG
       $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
@@ -34,8 +35,7 @@ test-clamav:
     - ip a
     - export docker_port=$(docker port clamav-stage_$BUILD_PRIMARY_TAG
       3310/tcp | cut -d ':' -f 2)
-    - echo $docker_port
-    - echo 'PING' | nc 127.0.0.1 $docker_port
+    - bash clamav/tests/clamd_eicar.sh
   only:
     changes:
       - clamav/*
