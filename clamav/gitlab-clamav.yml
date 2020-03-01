@@ -1,11 +1,4 @@
 ---
-check_prepare:
-  stage: build
-  script:
-    - source build_info.sh
-    - env
-
-
 build-clamv:
   stage: build
   script:
@@ -16,7 +9,7 @@ build-clamv:
     - docker push $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
     - for i in $BUILD_SECONDARY_TAGS ; do
         docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG \
-        $docker_username/clamav-stage:$i
+        $docker_username/clamav-stage:$i ; 
       done
   only:
     changes:
