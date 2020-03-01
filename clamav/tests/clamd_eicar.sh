@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
 
 echo "=== clamd EICAR testing ==="
 
@@ -19,7 +18,7 @@ count=0
 while [ $count -lt 60 ]; do
   echo "PING" | nc 127.0.0.1 ${clamd_map_port}
   count=$(( $count + 1 ))
-  x=$(( $x + 1 ))
+  sleep 10
 done
 
 
