@@ -20,6 +20,11 @@ ip a
 hostname
 docker network ls
 docker ps -a
+env
+
+echo "loop starts here"
+ping -c1 clamav
+
 
 count=0
 while [ $count -lt 6 ]; do
