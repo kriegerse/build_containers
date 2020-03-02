@@ -1,19 +1,6 @@
-#!/bin/bash
 #!/usr/bin/env bash
 
-
 echo "=== clamd EICAR testing ==="
-
-# echo "* Docker: pull image $docker_username/clamav-stage:$BUILD_PRIMARY_TAG"
-# #docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-#
-# echo "* Docker start clamav-stage_$BUILD_PRIMARY_TAG"
-# #docker run --network=bridge -d -P --name clamav-stage_$BUILD_PRIMARY_TAG $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-#
-# echo "* Docker: get clamd port mapping"
-# export clamd_map_port=$(docker port clamav-stage_$BUILD_PRIMARY_TAG 3310/tcp | cut -d ':' -f 2)
-# echo "port is ${clamd_map_port}"
-
 
 echo -e "\n* Installing helper dependencies"
 zypper --quiet -n --gpg-auto-import-keys refresh
@@ -46,17 +33,15 @@ while [ ${COUNT} -lt $MAXCOUNT ]; do
 done
 
 
-pushd clamav/tests > /dev/null
-
-REMOTE_CONF='clamd.remote.conf'
 echo -e "\n* Writing clamdscan config"
+
+pushd clamav/tests > /dev/null
+REMOTE_CONF='clamd.remote.conf'
 echo "TCPSocket ${CLAMAV_PORT_3310_TCP_PORT}" | tee -a ${REMOTE_CONF}
 echo "TCPAddr ${CLAMAV_PORT_3310_TCP_ADDR}" | tee -a ${REMOTE_CONF}
 
-
-echo -e "\n* Testing EICAR patterns"
-
 # all eicar cases have to alert a virus!
+echo -e "\n* Testing EICAR patterns"
 for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   curl --silent -o "${i}" "https://secure.eicar.org/${i}"
 
@@ -92,14 +77,28 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   rm $i
 done
 
-
-echo -e "\n* Testing random NONE EICAR pattern"
 # no VIRUS shall being reported!
+echo -e "\n* Testing random NONE EICAR pattern"
 RANDFILE=$(mktemp -p .)
 dd if=/dev/urandom of=${RANDFILE} count=2 bs=1M status=none
 
 echo -e "\nScan local file ${RANDFILE}"
 clamdscan -c ${REMOTE_CONF} ${RANDFILE}
+RESULT_CODE=$0
+
+if [[ ${RESULT_CODE} -eq 1 ]]; then
+  echo "ERROR: VIRUS FOUND!"
+  exit 1
+elif [[ ${RESULT_CODE} -eq 0 ]]; then
+  echo "OKAY: NO VIRUS FOUND!"
+else
+  echo "ERROR: clamd reported error"
+  exit 2
+fi
+
+echo -e "\nStreaming file ${RANDFILE}"
+clamdscan -c ${REMOTE_CONF} --stream ${RANDFILE}
+RESULT_CODE=$0
 
 if [[ ${RESULT_CODE} -eq 1 ]]; then
   echo "ERROR: VIRUS FOUND!"
