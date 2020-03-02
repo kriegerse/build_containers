@@ -22,6 +22,7 @@ test-clamav:
     # - docker:dind
     - name: kriegerse/clamav-stage:commit-6dad18c5
       alias: clamav
+  image: kriegerse/clamav-stage:commit-6dad18c5
   variables:
     BUILD_PRIMARY_TAG: commit-6dad18c5
   before_script: []
