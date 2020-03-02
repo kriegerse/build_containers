@@ -16,14 +16,30 @@ echo "=== clamd EICAR testing ==="
 
 echo "* Docker: waiting for clamd port ready"
 
-count=0
-while [ $count -lt 6 ]; do
-  count=$(( $count + 1 ))
-  docker exec -i clamav-stage_$BUILD_PRIMARY_TAG  supervisorctl status
-  echo "** PING clamav port ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
-  echo 'PING' | nc ${CLAMAV_PORT_3310_TCP_ADDR} ${CLAMAV_PORT_3310_TCP_PORT}
-  sleep 10
+COUNT=1
+MAXCOUNT=60
+SLEEPTIME=5
+
+while [ ${COUNT} -lt $MAXCOUNT ]; do
+  $RESULT=$(echo 'PING' | nc -n ${CLAMAV_PORT_3310_TCP_ADDR} ${CLAMAV_PORT_3310_TCP_PORT})
+
+  if [[ "${RESULT}" == "PONG"]]; then
+    echo "Reached CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
+    echo "ANSWER: $RESULT"
+    break
+  elif [[ ${COUNT} -eq ${MAXCOUNT} ]]; then
+    echo "Did no reach CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
+    echo "after $(( ${MAXCOUNT} * ${SLEEPTIME} )) seconds!"
+    echo "FAILED!"
+    exit 1
+  else
+    echo "Waiting for CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
+  fi
+
+  COUNT=$(( $COUNT + 1 ))
+  sleep ${SLEEPTIME}
 done
+
 
 
 # - docker ps -a
