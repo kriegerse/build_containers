@@ -13,7 +13,11 @@ echo "=== clamd EICAR testing ==="
 # echo "port is ${clamd_map_port}"
 
 
-echo "* Docker: waiting for clamd port ready"
+echo -e "\n* Installing helper dependencies"
+zypper -n --gpg-auto-import-keys refresh
+zypper -n in curl
+
+echo -e "\n* Waiting for clamd port ready"
 
 COUNT=1
 MAXCOUNT=60

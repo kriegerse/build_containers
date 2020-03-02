@@ -27,8 +27,8 @@ test-clamav:
     BUILD_PRIMARY_TAG: commit-6dad18c5
   before_script: []
   script:
-    # - source build_info.sh
-    - apk add bash clamav
+    - source build_info.sh
+    # - apk add bash clamav
     - bash clamav/tests/clamd_eicar.sh
   only:
     changes:
