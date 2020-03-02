@@ -33,7 +33,7 @@ while [ ${COUNT} -lt $MAXCOUNT ]; do
 done
 
 
-echo -e "\n\n* Writing clamdscan config"
+echo -e "-\n* Writing clamdscan config"
 
 pushd clamav/tests > /dev/null
 REMOTE_CONF='clamd.remote.conf'
@@ -41,11 +41,11 @@ echo "TCPSocket ${CLAMAV_PORT_3310_TCP_PORT}" | tee -a ${REMOTE_CONF}
 echo "TCPAddr ${CLAMAV_PORT_3310_TCP_ADDR}" | tee -a ${REMOTE_CONF}
 
 # all eicar cases have to alert a virus!
-echo -e "\n\n* Testing EICAR patterns"
+echo -e "-\n* Testing EICAR patterns"
 for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   curl --silent -o "${i}" "https://secure.eicar.org/${i}"
 
-  echo -e "\n\nScan local file ${i}"
+  echo -e "-\nScan local file ${i}"
   clamdscan -c ${REMOTE_CONF} "${i}"
   RESULT_CODE=$?
 
@@ -60,7 +60,7 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   fi
 
 
-  echo -e "\n\nStreaming file ${i}"
+  echo -e "-\nStreaming file ${i}"
   clamdscan -c ${REMOTE_CONF} --stream "${i}"
   RESULT_CODE=$?
 
@@ -78,11 +78,11 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
 done
 
 # no VIRUS shall being reported!
-echo -e "\n\n* Testing random NONE EICAR pattern"
+echo -e "-\n* Testing random NONE EICAR pattern"
 RANDFILE=$(mktemp -p .)
 dd if=/dev/urandom of="${RANDFILE}" count=2 bs=1M status=none
 
-echo -e "\n\nScan local file ${RANDFILE}"
+echo -e "-\nScan local file ${RANDFILE}"
 clamdscan -c ${REMOTE_CONF} "${RANDFILE}"
 RESULT_CODE=$?
 
@@ -96,7 +96,7 @@ else
   exit 2
 fi
 
-echo -e "\n\nStreaming file ${RANDFILE}"
+echo -e "-\nStreaming file ${RANDFILE}"
 clamdscan -c ${REMOTE_CONF} --stream "${RANDFILE}"
 RESULT_CODE=$?
 
