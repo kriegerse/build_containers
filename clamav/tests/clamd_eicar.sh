@@ -23,7 +23,7 @@ SLEEPTIME=5
 while [ ${COUNT} -lt $MAXCOUNT ]; do
   $RESULT=$(echo 'PING' | nc -n ${CLAMAV_PORT_3310_TCP_ADDR} ${CLAMAV_PORT_3310_TCP_PORT})
 
-  if [[ "${RESULT}" == "PONG"]]; then
+  if [[ "${RESULT}" == "PONG" ]]; then
     echo "Reached CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
     echo "ANSWER: $RESULT"
     break
