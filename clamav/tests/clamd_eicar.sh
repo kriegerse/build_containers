@@ -7,7 +7,7 @@ echo "* Docker: pull image $docker_username/clamav-stage:$BUILD_PRIMARY_TAG"
 docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
 
 echo "* Docker start clamav-stage_$BUILD_PRIMARY_TAG"
-docker run --network=host -d -P --name clamav-stage_$BUILD_PRIMARY_TAG $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+docker run --network=bridge -d -P --name clamav-stage_$BUILD_PRIMARY_TAG $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
 
 echo "* Docker: get clamd port mapping"
 export clamd_map_port=$(docker port clamav-stage_$BUILD_PRIMARY_TAG 3310/tcp | cut -d ':' -f 2)
