@@ -13,22 +13,22 @@ MAXCOUNT=60
 SLEEPTIME=5
 
 while [ ${COUNT} -lt $MAXCOUNT ]; do
-  RESULT=$(echo 'PING' | socat - tcp4:${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT})
+  RESULT=$(echo 'PING' | socat - tcp4:"${CLAMAV_PORT_3310_TCP_ADDR}":"${CLAMAV_PORT_3310_TCP_PORT}")
 
   if [[ "${RESULT}" == "PONG" ]]; then
     echo "Reached CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
     echo "ANSWER: $RESULT"
     break
-  elif [[ ${COUNT} -eq ${MAXCOUNT} ]]; then
+  elif [[ "${COUNT}" -eq "${MAXCOUNT}" ]]; then
     echo "Did no reach CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
-    echo "after $(( ${MAXCOUNT} * ${SLEEPTIME} )) seconds!"
+    echo "after $(( MAXCOUNT * SLEEPTIME )) seconds!"
     echo "FAILED!"
     exit 1
   else
     echo "Waiting for CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
   fi
 
-  COUNT=$(( $COUNT + 1 ))
+  COUNT=$(( COUNT + 1 ))
   sleep ${SLEEPTIME}
 done
 
@@ -49,9 +49,9 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   clamdscan -c ${REMOTE_CONF} "${i}"
   RESULT_CODE=$0
 
-  if [ ${RESULT_CODE} -eq 1 ]; then
+  if [ "${RESULT_CODE}" -eq 1 ]; then
     echo "OKAY: VIRUS FOUND"
-  elif [ ${RESULT_CODE} -eq 0 ]; then
+  elif [ "${RESULT_CODE}" -eq 0 ]; then
     echo "ERROR: NO VIRUS FOUND!"
     exit 1
   else
@@ -64,9 +64,9 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   clamdscan -c ${REMOTE_CONF} --stream "${i}"
   RESULT_CODE=$0
 
-  if [ ${RESULT_CODE} -eq 1 ]; then
+  if [ "${RESULT_CODE}" -eq 1 ]; then
     echo "OKAY: VIRUS FOUND"
-  elif [ ${RESULT_CODE} -eq 0 ]; then
+  elif [ "${RESULT_CODE}" -eq 0 ]; then
     echo "ERROR: NO VIRUS FOUND!"
     exit 1
   else
@@ -80,10 +80,10 @@ done
 # no VIRUS shall being reported!
 echo -e "\n* Testing random NONE EICAR pattern"
 RANDFILE=$(mktemp -p .)
-dd if=/dev/urandom of=${RANDFILE} count=2 bs=1M status=none
+dd if=/dev/urandom of="${RANDFILE}" count=2 bs=1M status=none
 
 echo -e "\nScan local file ${RANDFILE}"
-clamdscan -c ${REMOTE_CONF} ${RANDFILE}
+clamdscan -c ${REMOTE_CONF} "${RANDFILE}"
 RESULT_CODE=$0
 
 if [[ ${RESULT_CODE} -eq 1 ]]; then
@@ -97,7 +97,7 @@ else
 fi
 
 echo -e "\nStreaming file ${RANDFILE}"
-clamdscan -c ${REMOTE_CONF} --stream ${RANDFILE}
+clamdscan -c ${REMOTE_CONF} --stream "${RANDFILE}"
 RESULT_CODE=$0
 
 if [[ ${RESULT_CODE} -eq 1 ]]; then
