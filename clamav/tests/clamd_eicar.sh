@@ -46,6 +46,73 @@ while [ ${COUNT} -lt $MAXCOUNT ]; do
 done
 
 
+pushd clamav/tests
+REMOTE_CONF='clamd.remote.conf'
+echo -e "\n* Writing clamdscan config"
+echo "TCPSocket ${CLAMAV_PORT_3310_TCP_PORT}" | tee -a ${REMOTE_CONF}
+echo "TCPAddr ${CLAMAV_PORT_3310_TCP_ADDR}" | tee -a ${REMOTE_CONF}
+
+
+
+echo -e "\n* Testing EICAR patterns"
+
+# all eicar cases have to alert a virus!
+for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
+  curl --silent -o "${i}" "https://secure.eicar.org/${i}"
+
+  echo -e "\nScan local file ${i}"
+  clamdscan -c ${REMOTE_CONF} "${i}"
+  RESULT_CODE=$0
+
+  if [[ ${RESULT_CODE} -eq 1 ]]; then
+    echo "OKAY: VIRUS FOUND"
+  elif [[ ${RESULT_CODE} -eq 0 ]]; then
+    echo "ERROR: NO VIRUS FOUND!"
+    exit 1
+  else
+    echo "ERROR: clamd reported error"
+    exit 2
+  fi
+
+
+  echo -e "\nStreaming file ${i}"
+  clamdscan -c ${REMOTE_CONF} --stream "${i}"
+  RESULT_CODE=$0
+
+  if [[ ${RESULT_CODE} -eq 1 ]]; then
+    echo "OKAY: VIRUS FOUND"
+  elif [[ ${RESULT_CODE} -eq 0 ]]; then
+    echo "ERROR: NO VIRUS FOUND!"
+    exit 1
+  else
+    echo "ERROR: clamd reported error"
+    exit 2
+  fi
+
+  rm $i
+done
+
+
+echo -e "\n* Testing random NONE EICAR pattern"
+# no VIRUS shall being reported!
+RANDFILE=$(mktemp -p .)
+dd if=/dev/urandom of=${RANDFILE} count=2 bs=1M status=none
+
+echo -e "\nScan local file ${RANDFILE}"
+clamdscan -c ${REMOTE_CONF} ${RANDFILE}
+
+if [[ ${RESULT_CODE} -eq 1 ]]; then
+  echo "ERROR: VIRUS FOUND!"
+  exit 1
+elif [[ ${RESULT_CODE} -eq 0 ]]; then
+  echo "OKAY: NO VIRUS FOUND!"
+else
+  echo "ERROR: clamd reported error"
+  exit 2
+fi
+
+popd
+
 
 # - docker ps -a
 # - docker port clamav-stage_$BUILD_PRIMARY_TAG 3310/tcp
