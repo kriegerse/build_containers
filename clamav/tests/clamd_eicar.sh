@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 echo "=== clamd EICAR testing ==="
 
 echo -e "\n* Installing helper dependencies"
