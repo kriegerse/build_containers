@@ -15,7 +15,7 @@ echo "=== clamd EICAR testing ==="
 
 echo -e "\n* Installing helper dependencies"
 zypper -n --gpg-auto-import-keys refresh
-zypper -n in curl
+zypper -n in curl socat
 
 echo -e "\n* Waiting for clamd port ready"
 
@@ -24,7 +24,9 @@ MAXCOUNT=60
 SLEEPTIME=5
 
 while [ ${COUNT} -lt $MAXCOUNT ]; do
-  RESULT=$(echo 'PING' | nc -n ${CLAMAV_PORT_3310_TCP_ADDR} ${CLAMAV_PORT_3310_TCP_PORT})
+  RESULT=$(echo 'PING' | socat - tcp4:${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT})
+  # nc -n ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}
+
 
   if [[ "${RESULT}" == "PONG" ]]; then
     echo "Reached CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
