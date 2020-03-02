@@ -49,9 +49,9 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   clamdscan -c ${REMOTE_CONF} "${i}"
   RESULT_CODE=$0
 
-  if [ "${RESULT_CODE}" -eq 1 ]; then
+  if [[ "${RESULT_CODE}" -eq 1 ]]; then
     echo "OKAY: VIRUS FOUND"
-  elif [ "${RESULT_CODE}" -eq 0 ]; then
+  elif [[ "${RESULT_CODE}" -eq 0 ]]; then
     echo "ERROR: NO VIRUS FOUND!"
     exit 1
   else
