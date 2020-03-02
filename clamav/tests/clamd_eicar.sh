@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-
-set -x
-
 echo "=== clamd EICAR testing ==="
 
 # echo "* Docker: pull image $docker_username/clamav-stage:$BUILD_PRIMARY_TAG"

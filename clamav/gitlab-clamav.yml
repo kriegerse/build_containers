@@ -19,14 +19,15 @@
 test-clamav:
   stage: test
   services:
-    - docker:dind
+    # - docker:dind
     - name: kriegerse/clamav-stage:commit-6dad18c5
       alias: clamav
   variables:
     BUILD_PRIMARY_TAG: commit-6dad18c5
+  before_script: []
   script:
     # - source build_info.sh
-    - apk add bash
+    - apk add bash clamav
     - bash clamav/tests/clamd_eicar.sh
   only:
     changes:
