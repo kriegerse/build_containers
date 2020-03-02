@@ -1,4 +1,6 @@
+#!/bin/bash
 #!/usr/bin/env bash
+
 
 echo "=== clamd EICAR testing ==="
 
@@ -14,8 +16,8 @@ echo "=== clamd EICAR testing ==="
 
 
 echo -e "\n* Installing helper dependencies"
-zypper -n --gpg-auto-import-keys refresh
-zypper -n in curl socat
+zypper --quiet -n --gpg-auto-import-keys refresh
+zypper --quiet -n in curl socat
 
 echo -e "\n* Waiting for clamd port ready"
 
@@ -25,8 +27,6 @@ SLEEPTIME=5
 
 while [ ${COUNT} -lt $MAXCOUNT ]; do
   RESULT=$(echo 'PING' | socat - tcp4:${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT})
-  # nc -n ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}
-
 
   if [[ "${RESULT}" == "PONG" ]]; then
     echo "Reached CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
@@ -46,12 +46,12 @@ while [ ${COUNT} -lt $MAXCOUNT ]; do
 done
 
 
-pushd clamav/tests
+pushd clamav/tests > /dev/null
+
 REMOTE_CONF='clamd.remote.conf'
 echo -e "\n* Writing clamdscan config"
 echo "TCPSocket ${CLAMAV_PORT_3310_TCP_PORT}" | tee -a ${REMOTE_CONF}
 echo "TCPAddr ${CLAMAV_PORT_3310_TCP_ADDR}" | tee -a ${REMOTE_CONF}
-
 
 
 echo -e "\n* Testing EICAR patterns"
@@ -64,9 +64,9 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   clamdscan -c ${REMOTE_CONF} "${i}"
   RESULT_CODE=$0
 
-  if [[ ${RESULT_CODE} -eq 1 ]]; then
+  if [ ${RESULT_CODE} -eq 1 ]; then
     echo "OKAY: VIRUS FOUND"
-  elif [[ ${RESULT_CODE} -eq 0 ]]; then
+  elif [ ${RESULT_CODE} -eq 0 ]; then
     echo "ERROR: NO VIRUS FOUND!"
     exit 1
   else
@@ -79,9 +79,9 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
   clamdscan -c ${REMOTE_CONF} --stream "${i}"
   RESULT_CODE=$0
 
-  if [[ ${RESULT_CODE} -eq 1 ]]; then
+  if [ ${RESULT_CODE} -eq 1 ]; then
     echo "OKAY: VIRUS FOUND"
-  elif [[ ${RESULT_CODE} -eq 0 ]]; then
+  elif [ ${RESULT_CODE} -eq 0 ]; then
     echo "ERROR: NO VIRUS FOUND!"
     exit 1
   else
@@ -111,13 +111,4 @@ else
   exit 2
 fi
 
-popd
-
-
-# - docker ps -a
-# - docker port clamav-stage_$BUILD_PRIMARY_TAG 3310/tcp
-# - netstat -tulpn
-# - which nc
-# - ip a
-# - export docker_port=$(docker port clamav-stage_$BUILD_PRIMARY_TAG
-#   3310/tcp | cut -d ':' -f 2)
+popd > /dev/null
