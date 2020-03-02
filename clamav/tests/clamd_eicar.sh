@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 
+set -x
+
 echo "=== clamd EICAR testing ==="
 
 # echo "* Docker: pull image $docker_username/clamav-stage:$BUILD_PRIMARY_TAG"
@@ -21,7 +23,7 @@ MAXCOUNT=60
 SLEEPTIME=5
 
 while [ ${COUNT} -lt $MAXCOUNT ]; do
-  $RESULT=$(echo 'PING' | nc -n ${CLAMAV_PORT_3310_TCP_ADDR} ${CLAMAV_PORT_3310_TCP_PORT})
+  RESULT=$(echo 'PING' | nc -n ${CLAMAV_PORT_3310_TCP_ADDR} ${CLAMAV_PORT_3310_TCP_PORT})
 
   if [[ "${RESULT}" == "PONG" ]]; then
     echo "Reached CLAMAV on ${CLAMAV_PORT_3310_TCP_ADDR}:${CLAMAV_PORT_3310_TCP_PORT}"
