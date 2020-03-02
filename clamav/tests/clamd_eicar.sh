@@ -19,6 +19,7 @@ echo "* Docker: waiting for clamd port ready"
 ip a
 hostname
 docker info
+docker network ls
 
 count=0
 while [ $count -lt 6 ]; do
