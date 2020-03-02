@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
-
 echo "=== clamd EICAR testing ==="
 
 echo -e "\n* Installing helper dependencies"
@@ -49,7 +47,7 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
 
   echo -e "\nScan local file ${i}"
   clamdscan -c ${REMOTE_CONF} "${i}"
-  RESULT_CODE=$0
+  RESULT_CODE=$?
 
   if [[ "${RESULT_CODE}" -eq 1 ]]; then
     echo "OKAY: VIRUS FOUND"
@@ -64,7 +62,7 @@ for i in eicar.com eicar.com.txt eicar_com.zip eicarcom2.zip; do
 
   echo -e "\nStreaming file ${i}"
   clamdscan -c ${REMOTE_CONF} --stream "${i}"
-  RESULT_CODE=$0
+  RESULT_CODE=$?
 
   if [ "${RESULT_CODE}" -eq 1 ]; then
     echo "OKAY: VIRUS FOUND"
@@ -86,7 +84,7 @@ dd if=/dev/urandom of="${RANDFILE}" count=2 bs=1M status=none
 
 echo -e "\nScan local file ${RANDFILE}"
 clamdscan -c ${REMOTE_CONF} "${RANDFILE}"
-RESULT_CODE=$0
+RESULT_CODE=$?
 
 if [[ ${RESULT_CODE} -eq 1 ]]; then
   echo "ERROR: VIRUS FOUND!"
@@ -100,7 +98,7 @@ fi
 
 echo -e "\nStreaming file ${RANDFILE}"
 clamdscan -c ${REMOTE_CONF} --stream "${RANDFILE}"
-RESULT_CODE=$0
+RESULT_CODE=$?
 
 if [[ ${RESULT_CODE} -eq 1 ]]; then
   echo "ERROR: VIRUS FOUND!"
