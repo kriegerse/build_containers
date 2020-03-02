@@ -19,7 +19,7 @@
 test-clamav:
   stage: test
   services:
-    # - docker:dind
+    - docker:dind
     - name: kriegerse/clamav-stage:commit-6dad18c5
       alias: clamav
   variables:
