@@ -21,6 +21,8 @@ include:
 
 prepare-build-info:
   stage: prepare
+  image: alpine:latest
+  before_script: []
   script:
     - apk add bash
     - bash generate_build_info.sh > build_info.sh

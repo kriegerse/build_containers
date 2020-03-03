@@ -1,28 +1,48 @@
 ---
-check_prepare:
+build-clamv:
   stage: build
   script:
     - source build_info.sh
-    - env
-
-# build-clamv:
-#   stage: build
-#   script:
-#     - docker build --network host -f clamav/Dockerfile
-#       --build-arg FS_BASE=clamav
-#       -t $docker_username/clamav-stage:gitlabtest .
-#     - docker push $docker_username/clamav-stage:gitlabtest
-#   only:
-#     changes:
-#       - clamav/*
-
-# test-clamav:
-#  stage: test
+    - docker build --network host -f clamav/Dockerfile
+      --build-arg FS_BASE=clamav
+      -t $docker_username/clamav-stage:$BUILD_PRIMARY_TAG .
+    - docker push $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $BUILD_SECONDARY_TAGS ; do
+        docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+        $docker_username/clamav-stage:$i ;
+        docker push $docker_username/clamav-stage:$i ; done
+  only:
+    changes:
+      - clamav/*
+      - clamav/**/*
 
 
-# publish-clamav:
-#   stage: publish
-#   script:
-#     - docker pull
-#     - docker image ls
-#     - docker image ls $docker_username/clamav-stage:gitlabtest
+test-clamav:
+  stage: test
+  services:
+    - name: kriegerse/clamav-stage:commit-$CI_COMMIT_SHORT_SHA
+      alias: clamav
+  image: kriegerse/clamav-stage:commit-$CI_COMMIT_SHORT_SHA
+  before_script: []
+  script:
+    - source build_info.sh
+    - bash clamav/tests/clamd_eicar.sh
+  only:
+    changes:
+      - clamav/*
+      - clamav/**/*
+
+
+publish-clamav:
+  stage: publish
+  script:
+    - source build_info.sh
+    - echo "releasing image"
+  only:
+    changes:
+    refs:
+      - master
+      - schedules
+  except:
+    - branches
