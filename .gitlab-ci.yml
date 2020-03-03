@@ -19,12 +19,14 @@ include:
   - local: '/clamav/gitlab-clamav.yml'
 
 
-# prepare-build-info:
-#   stage: prepare
-#   script:
-#     - apk add bash
-#     - bash generate_build_info.sh > build_info.sh
-#   artifacts:
-#     expire_in: 1h
-#     paths:
-#       - build_info.sh
+prepare-build-info:
+  stage: prepare
+  image: alpine:latest
+  before_script: []
+  script:
+    - apk add bash
+    - bash generate_build_info.sh > build_info.sh
+  artifacts:
+    expire_in: 1h
+    paths:
+      - build_info.sh
