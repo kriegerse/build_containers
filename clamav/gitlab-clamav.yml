@@ -48,5 +48,5 @@ publish-clamav:
       - web
       - master
       - schedules
-  except:
-    - branches
+  # except:
+  #   - branches
