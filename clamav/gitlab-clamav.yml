@@ -41,9 +41,9 @@ publish-clamav:
     - echo "releasing image"
     - env | grep TAG
   only:
-    changes:
-      - clamav/*
-      - clamav/**/*
+    # changes:
+    #   - clamav/*
+    #   - clamav/**/*
     refs:
       - web
       - master
