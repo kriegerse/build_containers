@@ -39,9 +39,13 @@ publish-clamav:
   script:
     - source build_info.sh
     - echo "releasing image"
+    - env | grep TAG
   only:
     changes:
+      - clamav/*
+      - clamav/**/*
     refs:
+      - web
       - master
       - schedules
   except:
