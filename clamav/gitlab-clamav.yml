@@ -38,8 +38,12 @@ publish-clamav:
   stage: publish
   script:
     - source build_info.sh
-    - echo "releasing image"
-    - env | grep TAG
+    - docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
+        docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+        $docker_username/clamav:$i ;
+        docker push $docker_username/clamav:$i ; done
   only:
     # changes:
     #   - clamav/*
