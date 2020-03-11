@@ -32,14 +32,6 @@ build-clamv:
       changes:
         - clamav/*
         - clamav/**/*
-  # only:
-  #   refs:
-  #     - web
-  #     - branches
-  #     - schedules
-  #   changes:
-  #     - clamav/*
-  #     - clamav/**/*
 
 
 test-clamav:
@@ -72,14 +64,6 @@ test-clamav:
       changes:
         - clamav/*
         - clamav/**/*
-  # only:
-  #   refs:
-  #     - web
-  #     - branches
-  #     - schedules
-  #   # changes:
-  #   #   - clamav/*
-  #   #   - clamav/**/*
 
 
 publish-clamav:
@@ -102,13 +86,3 @@ publish-clamav:
       changes:
         - clamav/*
         - clamav/**/*
-  # only:
-  #   # changes:
-  #   #   - clamav/*
-  #   #   - clamav/**/*
-  #   refs:
-  #     - web
-  #     - master
-  #     - schedules
-  # # except:
-  # #   - branches
