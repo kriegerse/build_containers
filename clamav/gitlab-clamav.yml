@@ -12,10 +12,26 @@ build-clamv:
         docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
         $docker_username/clamav-stage:$i ;
         docker push $docker_username/clamav-stage:$i ; done
-  only:
-    changes:
-      - clamav/*
-      - clamav/**/*
+  rules:
+    # run on PR
+    - if: $CI_MERGE_REQUEST_ID
+    # run on branches other than master
+    - if: $CI_COMMIT_BRANCH != 'master'
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE =~ /schedule|web/
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - clamav/*
+        - clamav/**/*
+  # only:
+  #   refs:
+  #     - web
+  #     - branches
+  #     - schedules
+  #   changes:
+  #     - clamav/*
+  #     - clamav/**/*
 
 
 test-clamav:
@@ -28,10 +44,26 @@ test-clamav:
   script:
     - source build_info.sh
     - bash clamav/tests/clamd_eicar.sh
-  only:
-    changes:
-      - clamav/*
-      - clamav/**/*
+  rules:
+    # run on PR
+    - if: $CI_MERGE_REQUEST_ID
+    # run on branches other than master
+    - if: $CI_COMMIT_BRANCH != 'master'
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE =~ /schedule|web/
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - clamav/*
+        - clamav/**/*
+  # only:
+  #   refs:
+  #     - web
+  #     - branches
+  #     - schedules
+  #   # changes:
+  #   #   - clamav/*
+  #   #   - clamav/**/*
 
 
 publish-clamav:
@@ -44,13 +76,25 @@ publish-clamav:
         docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
         $docker_username/clamav:$i ;
         docker push $docker_username/clamav:$i ; done
-  only:
-    # changes:
-    #   - clamav/*
-    #   - clamav/**/*
-    refs:
-      - web
-      - master
-      - schedules
-  # except:
-  #   - branches
+  rules:
+    # run on PR
+    - if: $CI_MERGE_REQUEST_ID
+    # run on branches other than master
+    - if: $CI_COMMIT_BRANCH != 'master'
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE =~ /schedule|web/
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - clamav/*
+        - clamav/**/*
+  # only:
+  #   # changes:
+  #   #   - clamav/*
+  #   #   - clamav/**/*
+  #   refs:
+  #     - web
+  #     - master
+  #     - schedules
+  # # except:
+  # #   - branches
