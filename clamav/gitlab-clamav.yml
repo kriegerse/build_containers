@@ -13,10 +13,16 @@ build-clamv:
         $docker_username/clamav-stage:$i ;
         docker push $docker_username/clamav-stage:$i ; done
   rules:
-    # run on PR
+    # run on PR when changes on files
     - if: $CI_MERGE_REQUEST_ID
-    # run on branches other than master
+      changes:
+        - clamav/*
+        - clamav/**/*
+    # run on branches other than master when changes on files
     - if: $CI_COMMIT_BRANCH != 'master'
+      changes:
+        - clamav/*
+        - clamav/**/*
     # run on schedules or web frontend
     - if: $CI_PIPELINE_SOURCE =~ /schedule|web/
     # run on master when changes on files (e.g. after merge)
@@ -45,10 +51,16 @@ test-clamav:
     - source build_info.sh
     - bash clamav/tests/clamd_eicar.sh
   rules:
-    # run on PR
+    # run on PR when changes on files
     - if: $CI_MERGE_REQUEST_ID
-    # run on branches other than master
+      changes:
+        - clamav/*
+        - clamav/**/*
+    # run on branches other than master when changes on files
     - if: $CI_COMMIT_BRANCH != 'master'
+      changes:
+        - clamav/*
+        - clamav/**/*
     # run on schedules or web frontend
     - if: $CI_PIPELINE_SOURCE =~ /schedule|web/
     # run on master when changes on files (e.g. after merge)
@@ -77,7 +89,7 @@ publish-clamav:
         $docker_username/clamav:$i ;
         docker push $docker_username/clamav:$i ; done
   rules:
-    # run on schedules or web frontend and branch master
+    # run on schedules or web frontend and if branch master
     - if: $CI_PIPELINE_SOURCE =~ /schedule|web/ && $CI_COMMIT_BRANCH == 'master'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
