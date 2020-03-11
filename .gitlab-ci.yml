@@ -11,6 +11,7 @@ stages:
   - build
   - test
   - publish
+  - cleanup
 
 before_script:
   - docker login -u $docker_username -p "$docker_password" $docker_registry
