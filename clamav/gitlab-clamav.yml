@@ -24,7 +24,9 @@ build-clamv:
         - clamav/*
         - clamav/**/*
     # run on schedules or web frontend
-    - if: $CI_PIPELINE_SOURCE =~ /schedule|web/
+    - if: $CI_PIPELINE_SOURCE == 'web'
+    # run on schedules for clamav
+    - if: $schedule_job == 'clamav'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
@@ -62,7 +64,9 @@ test-clamav:
         - clamav/*
         - clamav/**/*
     # run on schedules or web frontend
-    - if: $CI_PIPELINE_SOURCE =~ /schedule|web/
+    - if: $CI_PIPELINE_SOURCE == 'web'
+    # run on schedules for clamav
+    - if: $schedule_job == 'clamav'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
@@ -89,8 +93,10 @@ publish-clamav:
         $docker_username/clamav:$i ;
         docker push $docker_username/clamav:$i ; done
   rules:
-    # run on schedules or web frontend and if branch master
-    - if: $CI_PIPELINE_SOURCE =~ /schedule|web/ && $CI_COMMIT_BRANCH == 'master'
+    # run on web frontend and if branch master
+    - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
+    # run on schedules for clamav and if branch master
+    - if: $schedule_job == 'clamav' && $CI_COMMIT_BRANCH == 'master'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
