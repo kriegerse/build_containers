@@ -17,7 +17,6 @@ before_script:
   - docker login -u $docker_username -p "$docker_password" $docker_registry
 
 include:
-  local:
     - '/clamav/gitlab-clamav.yml'
     - '/galera/gitlab-galera.yml'
 
