@@ -17,5 +17,5 @@ RUN bash /usr/local/bin/prepare_container.sh
 # EXPOSE GARBD PORT
 EXPOSE 4567
 
-# RUN garbd
+# RUN garbd (using systemd start script evaluation ENV)
 CMD ["/usr/bin/garb-systemd", "start"]
