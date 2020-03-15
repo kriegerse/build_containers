@@ -18,7 +18,7 @@ before_script:
 
 include:
   - local: '/clamav/gitlab-clamav.yml'
-
+  - local: '/galera/gitlab-galera.yml'
 
 prepare-build-info:
   stage: prepare
