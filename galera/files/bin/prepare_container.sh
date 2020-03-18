@@ -4,9 +4,6 @@
 source /etc/os-release
 BASE_VERSION_ID=${VERSION_ID%.*}
 
-
-env
-
 # add MariaDB repository
 zypper -vvv -n --gpg-auto-import-keys refresh
 zypper -vvv -n in curl
@@ -16,9 +13,8 @@ zypper -vvv -n --gpg-auto-import-keys refresh
 
 # install software
 zypper -vvv -n in ${MARIADB_PACKAGES}
-zypper -vvv -n rm --clean-deps curl 
+zypper -vvv -n rm --clean-deps curl
 zypper -vvv -n clean --all
-
 
 # self cleanup
 rm -f $0
