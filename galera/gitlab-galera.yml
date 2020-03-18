@@ -39,8 +39,8 @@ my-garbd-test:
   services:
     - mysql
   variables:
-    - MYSQL_DATABASE: my_galera_test
-    - MYSQL_ROOT_PASSWORD: my_galera_test
+    MYSQL_DATABASE: my_galera_test
+    MYSQL_ROOT_PASSWORD: my_galera_test
   image: mysql
   script:
     - env
