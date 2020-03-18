@@ -46,3 +46,23 @@ test-garbd1:
     script:
       - env
       - netstat -tulpn
+  rules:
+    # run on PR when changes on files
+    - if: $CI_MERGE_REQUEST_ID
+      changes:
+        - galera/*
+        - galera/**/*
+    # run on branches other than master when changes on files
+    - if: $CI_COMMIT_BRANCH != 'master'
+      changes:
+        - galera/*
+        - galera/**/*
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE == 'web'
+    # run on schedules for galera
+    - if: $schedule_job == 'galera'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - galera/*
+        - galera/**/*
