@@ -33,8 +33,7 @@ build-garbd:
         - galera/*
         - galera/**/*
 
-
-my-garbd-test:
+test-garbd:
   stage: test
   services:
     - mysql
