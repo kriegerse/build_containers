@@ -41,11 +41,10 @@ my-garbd-test:
   variables:
     - MYSQL_DATABASE: my_galera_test
     - MYSQL_ROOT_PASSWORD: my_galera_test
-  connect:
-    image: mysql
-    script:
-      - env
-      - netstat -tulpn
+  image: mysql
+  script:
+    - env
+    - netstat -tulpn
 
 # test-garbd1:
 #   stage: test
