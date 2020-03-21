@@ -1,49 +1,48 @@
 ---
-build-garbd:
-  stage: build
-  script:
-    - source build_info.sh
-    - docker build --network host -f galera/Dockerfile_garbd
-      --build-arg FS_BASE=galera
-      -t $docker_username/garbd-stage:$BUILD_PRIMARY_TAG .
-    - docker push $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
-    - docker image ls
-    - for i in $BUILD_SECONDARY_TAGS ; do
-        docker tag $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
-        $docker_username/garbd-stage:$i ;
-        docker push $docker_username/garbd-stage:$i ; done
-  rules:
-    # run on PR when changes on files
-    - if: $CI_MERGE_REQUEST_ID
-      changes:
-        - galera/*
-        - galera/**/*
-    # run on branches other than master when changes on files
-    - if: $CI_COMMIT_BRANCH != 'master'
-      changes:
-        - galera/*
-        - galera/**/*
-    # run on schedules or web frontend
-    - if: $CI_PIPELINE_SOURCE == 'web'
-    # run on schedules for galera
-    - if: $schedule_job == 'galera'
-    # run on master when changes on files (e.g. after merge)
-    - if: $CI_COMMIT_BRANCH == 'master'
-      changes:
-        - galera/*
-        - galera/**/*
+# build-garbd:
+#   stage: build
+#   script:
+#     - source build_info.sh
+#     - docker build --network host -f galera/Dockerfile_garbd
+#       --build-arg FS_BASE=galera
+#       -t $docker_username/garbd-stage:$BUILD_PRIMARY_TAG .
+#     - docker push $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
+#     - docker image ls
+#     - for i in $BUILD_SECONDARY_TAGS ; do
+#         docker tag $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
+#         $docker_username/garbd-stage:$i ;
+#         docker push $docker_username/garbd-stage:$i ; done
+#   rules:
+#     # run on PR when changes on files
+#     - if: $CI_MERGE_REQUEST_ID
+#       changes:
+#         - galera/*
+#         - galera/**/*
+#     # run on branches other than master when changes on files
+#     - if: $CI_COMMIT_BRANCH != 'master'
+#       changes:
+#         - galera/*
+#         - galera/**/*
+#     # run on schedules or web frontend
+#     - if: $CI_PIPELINE_SOURCE == 'web'
+#     # run on schedules for galera
+#     - if: $schedule_job == 'galera'
+#     # run on master when changes on files (e.g. after merge)
+#     - if: $CI_COMMIT_BRANCH == 'master'
+#       changes:
+#         - galera/*
+#         - galera/**/*
 
 test-garbd:
   stage: test
-  services:
-    - mysql
   variables:
     MYSQL_DATABASE: my_galera_test
     MYSQL_ROOT_PASSWORD: my_galera_test
-  image: mysql
   script:
-    - env
-    - netstat -tulpn
+    # - docker info
+    - docker network ls
+    - docker network create galera-cluster
+    - docker pull mariadb:latest
 
 # test-garbd1:
 #   stage: test
