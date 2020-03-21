@@ -42,7 +42,9 @@ test-garbd:
     # - docker info
     - docker network ls
     - docker network create galera-cluster
-    - docker pull mariadb:latest
+    - docker network ls
+    # - docker pull mariadb:latest
+    # - docker
 
 # test-garbd1:
 #   stage: test
