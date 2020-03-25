@@ -41,7 +41,7 @@ test-garbd:
   script:
     - apk add bash
     - source build_info.sh
-    - bash galera/tests/garbd_test.sh
+    - bash galera/files/tests/garbd_test.sh
   rules:
     # run on PR when changes on files
     - if: $CI_MERGE_REQUEST_ID
