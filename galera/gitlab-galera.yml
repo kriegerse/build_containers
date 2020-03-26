@@ -39,6 +39,7 @@ test-garbd:
   #   MYSQL_DATABASE: my_galera_test
   #   MYSQL_ROOT_PASSWORD: my_galera_test
   script:
+    - env
     - apk add bash
     - source build_info.sh
     - bash galera/files/tests/garbd_test.sh
