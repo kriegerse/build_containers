@@ -71,6 +71,8 @@ docker network ls
 echo "========================================================================="
 echo "Bootstrap Galera Cluster"
 echo "========================================================================="
+echo "* Set prober my.cnf permissions"
+chmod -v 664 ${SCRIPTPATH}/galera_my.cnf
 
 echo "* Start Node ${GALERA1} (bootstrap mode)"
 docker run -P -v ${SCRIPTPATH}/galera_my.cnf:/etc/mysql/my.cnf \
