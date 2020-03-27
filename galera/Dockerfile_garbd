@@ -1,0 +1,21 @@
+FROM opensuse/leap:latest
+# BUILD ARGS
+ARG FS_BASE=''
+ARG MARIADB_VERSION='10.4'
+ARG MARIADB_PACKAGES='galera-4'
+
+# define arguments to be submitted
+ENV GALERA_NODES ""
+ENV GALERA_GROUP ""
+ENV GALERA_OPTIONS ""
+ENV LOG_FILE ""
+
+# install + configure galera
+COPY ./${FS_BASE}/files  /usr/local/.
+RUN bash /usr/local/bin/prepare_container.sh
+
+# EXPOSE GARBD PORT
+EXPOSE 4567
+
+# RUN garbd (using systemd start script evaluation ENV)
+CMD ["/usr/bin/garb-systemd", "start"]
