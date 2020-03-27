@@ -15,7 +15,6 @@ if [[ ! "${CI}" == "true"  ]]; then
   docker_username="kriegerse"
   DOCKER_IMAGE="garbd"
   BUILD_PRIMARY_TAG="latest"
-  kriegerse/garbd-stage:commit-8990da84
 fi
 
 # HELPER FUNCTIONS

@@ -41,8 +41,7 @@ test-garbd:
   script:
     - apk add bash
     - source build_info.sh
-    - ls -alhtr galera/files/tests 
-    - bash -x galera/files/tests/garbd_test.sh
+    - bash galera/files/tests/garbd_test.sh
   rules:
     # run on PR when changes on files
     - if: $CI_MERGE_REQUEST_ID
@@ -58,6 +57,27 @@ test-garbd:
     - if: $CI_PIPELINE_SOURCE == 'web'
     # run on schedules for galera
     - if: $schedule_job == 'galera'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - galera/*
+        - galera/**/*
+
+publish-garbd:
+  stage: publish
+  script:
+    - source build_info.sh
+    - docker pull $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
+        docker tag $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
+        $docker_username/garbd:$i ;
+        docker push $docker_username/garbd:$i ; done
+  rules:
+    # run on web frontend and if branch master
+    - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
+    # run on schedules for clamav and if branch master
+    - if: $schedule_job == 'galera' && $CI_COMMIT_BRANCH == 'master'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
