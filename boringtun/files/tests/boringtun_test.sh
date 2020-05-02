@@ -36,7 +36,7 @@ docker network ls
 echo "========================================================================="
 echo "Create shared docker volume ${WGVOLUME} for data exchange"
 echo "========================================================================="
-docker docker volume create ${WGVOLUME}
+docker volume create ${WGVOLUME}
 docker volume ls
 
 echo "========================================================================="
