@@ -35,9 +35,6 @@ build-boringtun:
 
 test-boringtun:
   stage: test
-  # variables:
-  #   MYSQL_DATABASE: my_boringtun_test
-  #   MYSQL_ROOT_PASSWORD: my_boringtun_test
   script:
     - apk add bash
     - source build_info.sh
@@ -57,6 +54,27 @@ test-boringtun:
     - if: $CI_PIPELINE_SOURCE == 'web'
     # run on schedules for boringtun
     - if: $schedule_job == 'boringtun'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - boringtun/*
+        - boringtun/**/*
+
+publish-boringtun:
+  stage: publish
+  script:
+    - source build_info.sh
+    - docker pull $docker_username/boringtun-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
+        docker tag $docker_username/boringtun-stage:$BUILD_PRIMARY_TAG
+        $docker_username/boringtun:$i ;
+        docker push $docker_username/boringtun:$i ; done
+  rules:
+    # run on web frontend and if branch master
+    - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
+    # run on schedules for clamav and if branch master
+    - if: $schedule_job == 'boringtun' && $CI_COMMIT_BRANCH == 'master'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
