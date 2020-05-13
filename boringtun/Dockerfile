@@ -4,15 +4,21 @@ RUN zypper -n in cargo gcc \
 
 
 FROM opensuse/leap:latest
+ARG FS_BASE=''
 COPY --from=builder /usr/local/bin/boringtun /usr/local/bin/
+COPY ./${FS_BASE}/files/bin  /usr/local/bin/.
+
 RUN zypper -vvv -n ar --gpgcheck --refresh -f obs://network:vpn:wireguard wireguard \
     && zypper -vvv -n --gpg-auto-import-keys refresh \
-    && zypper -vvv -n in wireguard-tools iproute2 iputils iptables \
-    && zypper -vvv -n clean --all
+    && zypper -vvv -n in wireguard-tools iproute2 iputils iptables bash-completion \
+    && zypper -vvv -n clean --all \
+    && chmod -v +x /usr/local/bin/*
 
+ENV WG_LOG_LEVEL="info" \
+    WG_QUICK_USERSPACE_IMPLEMENTATION="boringtun" \
+    WG_SUDO=1 \
+    WG_ERR_LOG_FILE=/dev/stderr \
+    WG_LOG_FILE=/dev/stdout
 
-ENV WG_LOG_LEVEL=info \
-    WG_QUICK_USERSPACE_IMPLEMENTATION=boringtun \
-    WG_SUDO=1
-
-CMD ["wg-quick", "up", "$1"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["wg0"]
