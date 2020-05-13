@@ -19,6 +19,7 @@ before_script:
 include:
   - '/clamav/gitlab-clamav.yml'
   - '/galera/gitlab-galera.yml'
+  - '/boringtun/gitlab-boringtun.yml'
 
 prepare-build-info:
   stage: prepare
