@@ -23,6 +23,5 @@ ENV WG_LOG_LEVEL="info" \
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["wg0"]
 
-
 HEALTHCHECK --interval=5s --timeout=3s --start-period=30s --retries=3 \
   CMD  pgrep -aw boringtun  || exit 1
