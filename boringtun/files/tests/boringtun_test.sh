@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
 # HELPER VARS
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=$(dirname $SCRIPT)
@@ -169,6 +168,9 @@ else
   echo "ERROR: Couldn't start netcat on ${WG0}."
   exit 1
 fi
+
+echo "* Sleep (sleep 15 seconds) before starting file transfer"
+docker exec -t ${WG1} /bin/sleep 15
 
 echo "* Transfer /tmp/${WG1}_randfile from ${WG1} to ${WG0}"
 docker exec -t ${WG1} /bin/bash -c "tar -P -cf - /tmp/${WG1}_randfile | nc 10.0.0.1 1234"
