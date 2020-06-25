@@ -90,7 +90,7 @@ echo "========================================================================="
 echo "Downloading randfile through squid proxy"
 echo "========================================================================="
 echo "* Downloading randfile"
-DLCHKSUM=$(curl -vvv -L --proxy localhost:${PROXY_PORT} 'http://nginx/randfile' | md5sum | cut -d ' ' -f1)
+DLCHKSUM=$(curl -vvv -L --proxy 127.0.0.1:${PROXY_PORT} 'http://nginx/randfile' | md5sum | cut -d ' ' -f1)
 RESCODE=$?
 
 if [ $RESCODE -eq 0 ]; then
