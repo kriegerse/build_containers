@@ -20,6 +20,7 @@ include:
   - '/clamav/gitlab-clamav.yml'
   - '/galera/gitlab-galera.yml'
   - '/boringtun/gitlab-boringtun.yml'
+  - '/squid/gitlab-squid.yml'
 
 prepare-build-info:
   stage: prepare
