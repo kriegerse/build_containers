@@ -36,7 +36,7 @@ build-squid:
 test-squid:
   stage: test
   script:
-    - apk add bash
+    - apk add bash curl
     - source build_info.sh
     - bash squid/files/tests/squid_test.sh
   rules:
