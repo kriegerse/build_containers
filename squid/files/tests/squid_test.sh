@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 # HELPER VARS
 SCRIPT=$(readlink -f $0)
 DOCKER_IMAGE="squid-stage"

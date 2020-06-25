@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
-
 configure_cache_dir() {
   if [[ "${SQUID_CACHE_DIR}" != "" ]]; then
     echo "Configure Squid Cache Dir"
