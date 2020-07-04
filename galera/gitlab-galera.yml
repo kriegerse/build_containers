@@ -35,6 +35,10 @@ build-garbd:
 
 test-garbd:
   stage: test
+  needs:
+    - job: build-garbd
+    - job: prepare-build-info
+      artifacts: true
   # variables:
   #   MYSQL_DATABASE: my_galera_test
   #   MYSQL_ROOT_PASSWORD: my_galera_test
@@ -65,6 +69,10 @@ test-garbd:
 
 publish-garbd:
   stage: publish
+  needs:
+    - job: test-garbd
+    - job: prepare-build-info
+      artifacts: true
   script:
     - source build_info.sh
     - docker pull $docker_username/garbd-stage:$BUILD_PRIMARY_TAG

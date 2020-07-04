@@ -35,6 +35,10 @@ build-boringtun:
 
 test-boringtun:
   stage: test
+  needs:
+    - job: build-boringtun
+    - job: prepare-build-info
+      artifacts: true
   script:
     - apk add bash
     - source build_info.sh
@@ -62,6 +66,10 @@ test-boringtun:
 
 publish-boringtun:
   stage: publish
+  needs:
+    - job: test-boringtun
+    - job: prepare-build-info
+      artifacts: true
   script:
     - source build_info.sh
     - docker pull $docker_username/boringtun-stage:$BUILD_PRIMARY_TAG
