@@ -1,5 +1,5 @@
 ---
-build-clamv:
+build-clamav:
   stage: build
   script:
     - source build_info.sh
@@ -36,6 +36,10 @@ build-clamv:
 
 test-clamav:
   stage: test
+  needs:
+    - job: build-clamav
+    - job: prepare-build-info
+      artifacts: true
   services:
     - name: kriegerse/clamav-stage:commit-$CI_COMMIT_SHORT_SHA
       alias: clamav
@@ -68,6 +72,10 @@ test-clamav:
 
 publish-clamav:
   stage: publish
+  needs:
+    - job: test-clamav
+    - job: prepare-build-info
+      artifacts: true
   script:
     - source build_info.sh
     - docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG

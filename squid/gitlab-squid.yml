@@ -1,93 +1,90 @@
 ---
-build-garbd:
+build-squid:
   stage: build
   script:
     - source build_info.sh
-    - docker build --network host -f galera/Dockerfile_garbd
-      --build-arg FS_BASE=galera
-      -t $docker_username/garbd-stage:$BUILD_PRIMARY_TAG .
-    - docker push $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
+    - docker build --network host -f squid/Dockerfile
+      --build-arg FS_BASE=squid
+      -t $docker_username/squid-stage:$BUILD_PRIMARY_TAG .
+    - docker push $docker_username/squid-stage:$BUILD_PRIMARY_TAG
     - docker image ls
     - for i in $BUILD_SECONDARY_TAGS ; do
-        docker tag $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
-        $docker_username/garbd-stage:$i ;
-        docker push $docker_username/garbd-stage:$i ; done
+        docker tag $docker_username/squid-stage:$BUILD_PRIMARY_TAG
+        $docker_username/squid-stage:$i ;
+        docker push $docker_username/squid-stage:$i ; done
   rules:
     # run on PR when changes on files
     - if: $CI_MERGE_REQUEST_ID
       changes:
-        - galera/*
-        - galera/**/*
+        - squid/*
+        - squid/**/*
     # run on branches other than master when changes on files
     - if: $CI_COMMIT_BRANCH != 'master'
       changes:
-        - galera/*
-        - galera/**/*
+        - squid/*
+        - squid/**/*
     # run on schedules or web frontend
     - if: $CI_PIPELINE_SOURCE == 'web'
-    # run on schedules for galera
-    - if: $schedule_job == 'galera'
+    # run on schedules for squid
+    - if: $schedule_job == 'squid'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - galera/*
-        - galera/**/*
+        - squid/*
+        - squid/**/*
 
-test-garbd:
+test-squid:
   stage: test
   needs:
-    - job: build-garbd
+    - job: build-squid
     - job: prepare-build-info
       artifacts: true
-  # variables:
-  #   MYSQL_DATABASE: my_galera_test
-  #   MYSQL_ROOT_PASSWORD: my_galera_test
   script:
-    - apk add bash
+    - apk add bash curl
     - source build_info.sh
-    - bash galera/files/tests/garbd_test.sh
+    - bash squid/files/tests/squid_test.sh
   rules:
     # run on PR when changes on files
     - if: $CI_MERGE_REQUEST_ID
       changes:
-        - galera/*
-        - galera/**/*
+        - squid/*
+        - squid/**/*
     # run on branches other than master when changes on files
     - if: $CI_COMMIT_BRANCH != 'master'
       changes:
-        - galera/*
-        - galera/**/*
+        - squid/*
+        - squid/**/*
     # run on schedules or web frontend
     - if: $CI_PIPELINE_SOURCE == 'web'
-    # run on schedules for galera
-    - if: $schedule_job == 'galera'
+    # run on schedules for squid
+    - if: $schedule_job == 'squid'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - galera/*
-        - galera/**/*
+        - squid/*
+        - squid/**/*
 
-publish-garbd:
+publish-squid:
   stage: publish
   needs:
-    - job: test-garbd
+    - job: test-squid
     - job: prepare-build-info
       artifacts: true
   script:
     - source build_info.sh
-    - docker pull $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
+    - docker pull $docker_username/squid-stage:$BUILD_PRIMARY_TAG
     - docker image ls
     - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
-        docker tag $docker_username/garbd-stage:$BUILD_PRIMARY_TAG
-        $docker_username/garbd:$i ;
-        docker push $docker_username/garbd:$i ; done
+        docker tag $docker_username/squid-stage:$BUILD_PRIMARY_TAG
+        $docker_username/squid:$i ;
+        docker push $docker_username/squid:$i ; done
   rules:
     # run on web frontend and if branch master
     - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
     # run on schedules for clamav and if branch master
-    - if: $schedule_job == 'galera' && $CI_COMMIT_BRANCH == 'master'
+    - if: $schedule_job == 'squid' && $CI_COMMIT_BRANCH == 'master'
     # run on master when changes on files (e.g. after merge)
     - if: $CI_COMMIT_BRANCH == 'master'
       changes:
-        - galera/*
-        - galera/**/*
+        - squid/*
+        - squid/**/*
