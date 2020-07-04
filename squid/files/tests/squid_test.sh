@@ -40,14 +40,18 @@ docker run --rm -P \
     --network squid \
     -dt ${docker_username}/${DOCKER_IMAGE}:${BUILD_PRIMARY_TAG}
 
+#
+# echo "========================================================================="
+# echo "Detecting squid proxy port"
+# echo "========================================================================="
+# PROXY_PORT=$(docker port squid 3128/tcp | cut -d ':' -f2)
+# echo "Found: $PROXY_PORT"
 
 echo "========================================================================="
-echo "Detecting squid proxy port"
+echo "Installing curl in squid proxy"
 echo "========================================================================="
-PROXY_PORT=$(docker port squid 3128/tcp | cut -d ':' -f2)
-echo "Found: $PROXY_PORT"
+docker exec -t squid  zypper -vvv -n in curl
 
-sleep 5
 
 echo "========================================================================="
 echo "Starting nginx webserver"
@@ -90,7 +94,11 @@ echo "========================================================================="
 echo "Downloading randfile through squid proxy"
 echo "========================================================================="
 echo "* Downloading randfile"
-DLCHKSUM=$(curl -vvv -L --proxy 127.0.0.1:${PROXY_PORT} 'http://nginx/randfile' | md5sum | cut -d ' ' -f1)
+docker exec -t squid /bin/bash -c 'hostname')
+docker exec -t squid /bin/bash -c 'ip addr show')
+docker exec -t squid /bin/bash -c 'ifconfig')
+DLCHKSUM=$(docker exec -t squid /bin/bash -c 'curl -vvv -L --proxy 127.0.0.1:3128 http://nginx/randfile | md5sum | cut -d " " -f1')
+# curl -vvv -L --proxy 127.0.0.1:${PROXY_PORT} 'http://nginx/randfile' | md5sum | cut -d ' ' -f1)
 RESCODE=$?
 
 if [ $RESCODE -eq 0 ]; then
