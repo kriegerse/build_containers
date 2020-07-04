@@ -95,7 +95,6 @@ echo "Downloading randfile through squid proxy"
 echo "========================================================================="
 echo "* Downloading randfile"
 DLCHKSUM=$(docker exec -t squid /bin/bash -c 'curl -s -L --proxy squid:3128 http://nginx/randfile | md5sum | cut -d " " -f1')
-# curl -vvv -L --proxy 127.0.0.1:${PROXY_PORT} 'http://nginx/randfile' | md5sum | cut -d ' ' -f1)
 RESCODE=$?
 
 if [ $RESCODE -eq 0 ]; then
@@ -107,7 +106,7 @@ fi
 
 
 echo "* Comparing checksums"
-if [[ "${RANDCHKSUM}" == "${DLCHKSUM}" ]]; then
+if [ "${RANDCHKSUM}" == "${DLCHKSUM}" ]; then
   echo "OKAY: Successfully compared checksums: ORIGIN: ${RANDCHKSUM}, DOWNLOAD: ${DLCHKSUM}"
 else
   echo "ERROR: Different checksums found: ORIGIN: ${RANDCHKSUM}, DOWNLOAD: ${DLCHKSUM}"
