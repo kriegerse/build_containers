@@ -1,5 +1,5 @@
 ---
-build-clamv:
+build-clamav:
   stage: build
   script:
     - source build_info.sh
