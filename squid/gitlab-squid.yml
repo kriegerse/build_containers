@@ -35,6 +35,7 @@ build-squid:
 
 test-squid:
   stage: test
+  needs: ["build-squid"]
   script:
     - apk add bash curl
     - source build_info.sh
@@ -62,6 +63,7 @@ test-squid:
 
 # publish-squid:
 #   stage: publish
+#   needs: ["test-squid"]
 #   script:
 #     - source build_info.sh
 #     - docker pull $docker_username/squid-stage:$BUILD_PRIMARY_TAG
