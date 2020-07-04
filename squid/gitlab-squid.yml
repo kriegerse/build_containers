@@ -37,7 +37,6 @@ test-squid:
   stage: test
   needs:
     - job: build-squid
-      artifacts: true
     - job: prepare-build-info
       artifacts: true
   script:
@@ -65,24 +64,27 @@ test-squid:
         - squid/*
         - squid/**/*
 
-# publish-squid:
-#   stage: publish
-#   needs: ["test-squid"]
-#   script:
-#     - source build_info.sh
-#     - docker pull $docker_username/squid-stage:$BUILD_PRIMARY_TAG
-#     - docker image ls
-#     - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
-#         docker tag $docker_username/squid-stage:$BUILD_PRIMARY_TAG
-#         $docker_username/squid:$i ;
-#         docker push $docker_username/squid:$i ; done
-#   rules:
-#     # run on web frontend and if branch master
-#     - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
-#     # run on schedules for clamav and if branch master
-#     - if: $schedule_job == 'squid' && $CI_COMMIT_BRANCH == 'master'
-#     # run on master when changes on files (e.g. after merge)
-#     - if: $CI_COMMIT_BRANCH == 'master'
-#       changes:
-#         - squid/*
-#         - squid/**/*
+publish-squid:
+  stage: publish
+  needs:
+    - job: test-squid
+    - job: prepare-build-info
+      artifacts: true
+  script:
+    - source build_info.sh
+    - docker pull $docker_username/squid-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
+        docker tag $docker_username/squid-stage:$BUILD_PRIMARY_TAG
+        $docker_username/squid:$i ;
+        docker push $docker_username/squid:$i ; done
+  rules:
+    # run on web frontend and if branch master
+    - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
+    # run on schedules for clamav and if branch master
+    - if: $schedule_job == 'squid' && $CI_COMMIT_BRANCH == 'master'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - squid/*
+        - squid/**/*
