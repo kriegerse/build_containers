@@ -94,11 +94,7 @@ echo "========================================================================="
 echo "Downloading randfile through squid proxy"
 echo "========================================================================="
 echo "* Downloading randfile"
-docker exec -t squid /bin/bash -c 'zypper -n in iproute2 net-tools-deprecated'
-docker exec -t squid /bin/bash -c 'hostname'
-docker exec -t squid /bin/bash -c 'ip addr show'
-docker exec -t squid /bin/bash -c 'ifconfig'
-DLCHKSUM=$(docker exec -t squid /bin/bash -c 'curl -vvv -L --proxy squid:3128 http://nginx/randfile | md5sum | cut -d " " -f1')
+DLCHKSUM=$(docker exec -t squid /bin/bash -c 'curl -s -L --proxy squid:3128 http://nginx/randfile | md5sum | cut -d " " -f1')
 # curl -vvv -L --proxy 127.0.0.1:${PROXY_PORT} 'http://nginx/randfile' | md5sum | cut -d ' ' -f1)
 RESCODE=$?
 
