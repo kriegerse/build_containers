@@ -94,13 +94,23 @@ echo "========================================================================="
 echo "Downloading randfile through squid proxy"
 echo "========================================================================="
 echo "* Downloading randfile"
-DLCHKSUM=$(docker exec -t squid /bin/bash -c 'curl -s -L --proxy squid:3128 http://nginx/randfile | md5sum | cut -d " " -f1')
+docker exec -t squid /bin/bash -c 'curl -vvv -L --proxy squid:3128 http://nginx/randfile -o /tmp/randfile'
 RESCODE=$?
 
 if [ $RESCODE -eq 0 ]; then
   echo "OKAY: Successfully download randfile via squid proxy."
 else
   echo "ERROR: Couldn't download randfile via squid proxy."
+  exit 1
+fi
+
+echo "* Get checksum from downloaded file"
+DLCHKSUM=$(docker exec -t squid md5sum /tmp/randfile | cut -d ' ' -f1)
+RESCODE=$?
+if [ $RESCODE -eq 0 ]; then
+  echo "OKAY: Get checksum ${DLCHKSUM} from /tmp/randfile on squid proxy."
+else
+  echo "ERROR: Couldn't get checksum from /tmp/randfile on squid proxy."
   exit 1
 fi
 
