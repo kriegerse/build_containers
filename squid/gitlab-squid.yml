@@ -35,7 +35,9 @@ build-squid:
 
 test-squid:
   stage: test
-  needs: ["build-squid"]
+  needs:
+    - job: build-squid
+      artifacts: true
   script:
     - apk add bash curl
     - source build_info.sh
