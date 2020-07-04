@@ -38,6 +38,8 @@ test-squid:
   needs:
     - job: build-squid
       artifacts: true
+    - job: prepare-build-info
+      artifacts: true
   script:
     - apk add bash curl
     - source build_info.sh
