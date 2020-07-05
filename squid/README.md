@@ -29,6 +29,7 @@ cache location.
 SQUID_CACHE_DIR=/var/cache/squid
 SQUID_CACHE_ENGINE=aufs
 SQUID_CACHE_SIZE=1000
+SQUID_CACHE_MEM=100
 SQUID_MAX_OBJECT_SIZE=512
 SQUID_CONF=/etc/squid/squid.conf
 ```

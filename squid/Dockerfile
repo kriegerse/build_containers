@@ -5,6 +5,7 @@ ARG FS_BASE=''
 ENV SQUID_CACHE_DIR=/var/cache/squid \
     SQUID_CACHE_ENGINE=aufs \
     SQUID_CACHE_SIZE=1000 \
+    SQUID_CACHE_MEM=100 \
     SQUID_CONF=/etc/squid/squid.conf \
     SQUID_MAX_OBJECT_SIZE=512
 
