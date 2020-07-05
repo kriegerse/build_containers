@@ -17,6 +17,11 @@ configure_max_object_size() {
   echo "maximum_object_size ${SQUID_MAX_OBJECT_SIZE} MB" >> ${SQUID_CONF}
 }
 
+configure_cache_mem() {
+  echo "Configure Cache Mem"
+  echo "cache_mem ${SQUID_CACHE_MEM} MB" >> ${SQUID_CONF}
+}
+
 configure_logging_stdout() {
   # allow logging to stdout/stderr for none root user
   chmod a+rw /dev/pts/0 /dev/stdout
@@ -26,8 +31,10 @@ configure_logging_stdout() {
   echo "cache_store_log stdio:/dev/stdout" >> ${SQUID_CONF}
 }
 
+
 if [[ -z ${1} ]]; then
   configure_cache_dir
+  configure_cache_mem
   configure_max_object_size
   configure_logging_stdout
   echo "Starting squid..."
