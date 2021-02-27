@@ -81,6 +81,7 @@ done
 echo -e "-\n* Testing random NONE EICAR pattern"
 RANDFILE=$(mktemp -p .)
 dd if=/dev/urandom of="${RANDFILE}" count=2 bs=1M status=none
+chmod +r "${RANDFILE}"
 
 echo -e "-\nScan local file ${RANDFILE}"
 clamdscan -c ${REMOTE_CONF} "${RANDFILE}"
