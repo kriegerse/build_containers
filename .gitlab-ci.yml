@@ -21,6 +21,7 @@ include:
   - '/galera/gitlab-galera.yml'
   - '/boringtun/gitlab-boringtun.yml'
   - '/squid/gitlab-squid.yml'
+  - '/nextcloud/gitlab-nextcloud.yml'
 
 prepare-build-info:
   stage: prepare
