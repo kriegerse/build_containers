@@ -1,0 +1,34 @@
+---
+build-nextcloud:
+  stage: build
+  script:
+    - source build_info.sh
+    - docker build --network host -f nextcloud/Dockerfile
+      --build-arg FS_BASE=nextcloud
+      -t $docker_username/nextcloud-stage:$BUILD_PRIMARY_TAG .
+    - docker push $docker_username/nextcloud-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $BUILD_SECONDARY_TAGS ; do
+        docker tag $docker_username/nextcloud-stage:$BUILD_PRIMARY_TAG
+        $docker_username/nextcloud-stage:$i ;
+        docker push $docker_username/nextcloud-stage:$i ; done
+  rules:
+    # run on PR when changes on files
+    - if: $CI_MERGE_REQUEST_ID
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
+    # run on branches other than master when changes on files
+    - if: $CI_COMMIT_BRANCH != 'master'
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE == 'web'
+    # run on schedules for nextcloud
+    - if: $schedule_job == 'nextcloud'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
