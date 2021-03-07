@@ -37,7 +37,7 @@ build-nextcloud:
 test-nextcloud:
   stage: test
   needs:
-    # - job: build-nextcloud
+    - job: build-nextcloud
     - job: prepare-build-info
       artifacts: true
   script:
