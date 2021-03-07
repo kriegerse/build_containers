@@ -15,7 +15,6 @@ if [[ ! "${CI}" == "true"  ]]; then
   BUILD_PRIMARY_TAG="latest"
 fi
 
-
 # fetch docker images
 echo "========================================================================="
 echo "Pulling docker images"
@@ -37,15 +36,12 @@ docker run --rm -P \
     -dt ${docker_username}/${DOCKER_IMAGE}:${BUILD_PRIMARY_TAG}
 
 
-echo
-echo "========================================================================="
-echo "Detecting nextcloud service port"
-echo "========================================================================="
-NC_PORT=$(docker port nc-testing 80/tcp | cut -d ':' -f2)
-echo "Found: ${NC_PORT}"
-
-ip addr show
-netstat -tulpn
+# echo
+# echo "========================================================================="
+# echo "Detecting nextcloud service port"
+# echo "========================================================================="
+# NC_PORT=$(docker port nc-testing 80/tcp | cut -d ':' -f2)
+# echo "Found: ${NC_PORT}"
 
 echo
 echo "========================================================================="
@@ -54,31 +50,33 @@ echo "========================================================================="
 COUNT=1
 MAXCOUNT=60
 SLEEPTIME=5
+COMMAND="docker exec -t nc-testing  curl -s --fail -w %{http_code}  http://127.0.0.1:80"
 
 while [ ${COUNT} -le $MAXCOUNT ]; do
-  RESULT=$(curl -s --fail -w "%{http_code}"  http://127.0.0.1:${NC_PORT})
-
-  if [[ "${RESULT}" != "000" ]]; then
-    echo "Reached nextcloud on port ${NC_PORT}"
+  RESULT="$(${COMMAND})"
+  if [[ ${RESULT} != '000' ]]; then
+    echo "Reached nextcloud"
     echo "ANSWER: ${RESULT}"
     break
   elif [[ "${COUNT}" -eq "${MAXCOUNT}" ]]; then
-    echo "Did no reach nextcloud on port ${NC_PORT}"
+    echo "Did no reach nextcloud"
     echo "after $(( MAXCOUNT * SLEEPTIME )) seconds!"
     echo "FAILED!"
     exit 1
   else
-    echo "Waiting for nextcloud on port ${NC_PORT}"
+    echo "Waiting for nextcloud"
     COUNT=$(( COUNT + 1 ))
     sleep ${SLEEPTIME}
   fi
 done
 
+
 echo
 echo "========================================================================="
 echo "Checking for nextcloud status page"
 echo "========================================================================="
-RESULT=$(curl -s http://127.0.0.1:${NC_PORT}/status.php -L)
+COMMAND="docker exec -t nc-testing curl -s -L http://127.0.0.1:80/status.php"
+RESULT="$(${COMMAND})"
 
 if echo ${RESULT} | jq '.' > /dev/null ; then
   echo "Got valid JSON from status page"
@@ -95,7 +93,8 @@ echo
 echo "========================================================================="
 echo "Checking for nextcloud index page"
 echo "========================================================================="
-RESULT=$(curl -s http://127.0.0.1:${NC_PORT}/index.php -L)
+COMMAND="docker exec -t nc-testing  curl -s -L http://127.0.0.1:80/index.php"
+RESULT="$(${COMMAND})"
 
 if [[ ${RESULT} != "" ]]; then
   echo "Got index page"
