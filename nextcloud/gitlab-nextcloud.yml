@@ -1,0 +1,92 @@
+---
+build-nextcloud:
+  stage: build
+  script:
+    - source build_info.sh
+    - docker build --network host -f nextcloud/Dockerfile
+      --build-arg FS_BASE=nextcloud
+      -t $docker_username/nextcloud-stage:$BUILD_PRIMARY_TAG .
+    - docker push $docker_username/nextcloud-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $BUILD_SECONDARY_TAGS ; do
+        docker tag $docker_username/nextcloud-stage:$BUILD_PRIMARY_TAG
+        $docker_username/nextcloud-stage:$i ;
+        docker push $docker_username/nextcloud-stage:$i ; done
+  rules:
+    # run on PR when changes on files
+    - if: $CI_MERGE_REQUEST_ID
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
+    # run on branches other than master when changes on files
+    - if: $CI_COMMIT_BRANCH != 'master'
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE == 'web'
+    # run on schedules for nextcloud
+    - if: $schedule_job == 'nextcloud'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
+
+
+test-nextcloud:
+  stage: test
+  needs:
+    - job: build-nextcloud
+    - job: prepare-build-info
+      artifacts: true
+  script:
+    - apk add bash jq curl
+    - source build_info.sh
+    - bash nextcloud/tests/nextcloud_test.sh
+  rules:
+    # run on PR when changes on files
+    - if: $CI_MERGE_REQUEST_ID
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
+    # run on branches other than master when changes on files
+    - if: $CI_COMMIT_BRANCH != 'master'
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE == 'web'
+    # run on schedules for nextcloud
+    - if: $schedule_job == 'nextcloud'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
+
+
+publish-nextcloud:
+  stage: publish
+  needs:
+    - job: test-nextcloud
+    - job: prepare-build-info
+      artifacts: true
+  script:
+    - source build_info.sh
+    - docker pull $docker_username/nextcloud-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
+        docker tag $docker_username/nextcloud-stage:$BUILD_PRIMARY_TAG
+        $docker_username/nextcloud:$i ;
+        docker push $docker_username/nextcloud:$i ; done
+  rules:
+    # run on web frontend and if branch master
+    - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
+    # run on schedules for clamav and if branch master
+    - if: $schedule_job == 'nextcloud' && $CI_COMMIT_BRANCH == 'master'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - nextcloud/*
+        - nextcloud/**/*
