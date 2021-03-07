@@ -9,8 +9,6 @@ if [[ ! "${CI}" == "true"  ]]; then
   docker_username="kriegerse"
   DOCKER_IMAGE="nextcloud"
   BUILD_PRIMARY_TAG="latest"
-  DOCKER_IMAGE="nextcloud-stage"
-  BUILD_PRIMARY_TAG="branch-enable_nextcloud"
 fi
 
 
