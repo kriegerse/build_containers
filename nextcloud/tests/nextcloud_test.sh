@@ -6,8 +6,6 @@ set -x
 SCRIPT=$(readlink -f $0)
 DOCKER_IMAGE="nextcloud-stage"
 
-BUILD_PRIMARY_TAG="commit-92d89100"
-
 # If not in CI use latest from production
 if [[ ! "${CI}" == "true"  ]]; then
   docker_username="kriegerse"
@@ -98,7 +96,6 @@ RESULT="$(${COMMAND})"
 
 if [[ ${RESULT} != "" ]]; then
   echo "Got index page"
-  echo "ANSWER: ${RESULT}"
 else
   echo "Got none index page"
   echo "ANSWER: ${RESULT}"
@@ -110,4 +107,4 @@ echo
 echo "========================================================================="
 echo "Stoping nextcloud container"
 echo "========================================================================="
-docker stop nginx nc-testing
+docker stop nc-testing
