@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
+set -x
+
 # HELPER VARS
 SCRIPT=$(readlink -f $0)
 DOCKER_IMAGE="nextcloud-stage"
+
+BUILD_PRIMARY_TAG="commit-92d89100"
 
 # If not in CI use latest from production
 if [[ ! "${CI}" == "true"  ]]; then
@@ -40,6 +44,9 @@ echo "========================================================================="
 NC_PORT=$(docker port nc-testing 80/tcp | cut -d ':' -f2)
 echo "Found: ${NC_PORT}"
 
+ip addr show
+netstat -tulpn
+
 echo
 echo "========================================================================="
 echo "Waiting for nextcloud service port ready"
@@ -48,7 +55,7 @@ COUNT=1
 MAXCOUNT=60
 SLEEPTIME=5
 
-while [ ${COUNT} -lt $MAXCOUNT ]; do
+while [ ${COUNT} -le $MAXCOUNT ]; do
   RESULT=$(curl -s --fail -w "%{http_code}"  http://127.0.0.1:${NC_PORT})
 
   if [[ "${RESULT}" != "000" ]]; then
@@ -62,9 +69,9 @@ while [ ${COUNT} -lt $MAXCOUNT ]; do
     exit 1
   else
     echo "Waiting for nextcloud on port ${NC_PORT}"
+    COUNT=$(( COUNT + 1 ))
+    sleep ${SLEEPTIME}
   fi
-  COUNT=$(( COUNT + 1 ))
-  sleep ${SLEEPTIME}
 done
 
 echo
