@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
 
 # HELPER VARS
 SCRIPT=$(readlink -f $0)
@@ -78,9 +77,8 @@ echo
 echo "========================================================================="
 echo "Checking for CRON process"
 echo "========================================================================="
-COMMAND="docker exec -t wp-testing pgrep -c cron"
+COMMAND="docker exec -t wp-testing pgrep -fc busybox.*crond"
 RESULT="$(${COMMAND} | tr -d '\r')"
-
 
 if [ ${RESULT} -ge 1 ]; then
   echo "Found cron process(es) - Number: ${RESULT}"
