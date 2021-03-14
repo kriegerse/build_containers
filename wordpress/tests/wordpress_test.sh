@@ -8,8 +8,8 @@ DOCKER_IMAGE="wordpress-stage"
 # If not in CI use latest from production
 if [[ ! "${CI}" == "true"  ]]; then
   docker_username="kriegerse"
-  DOCKER_IMAGE="wordpress-stage"
-  BUILD_PRIMARY_TAG="test"
+  DOCKER_IMAGE="wordpress"
+  BUILD_PRIMARY_TAG="latest"
 fi
 
 echo "========================================================================="
