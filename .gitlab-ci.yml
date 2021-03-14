@@ -22,6 +22,7 @@ include:
   - '/boringtun/gitlab-boringtun.yml'
   - '/squid/gitlab-squid.yml'
   - '/nextcloud/gitlab-nextcloud.yml'
+  - '/wordpress/gitlab-wordpress.yml'
 
 prepare-build-info:
   stage: prepare
