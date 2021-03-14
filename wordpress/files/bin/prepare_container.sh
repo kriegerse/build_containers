@@ -4,7 +4,7 @@
 set -ex
 
 # DEFINE VARS
-OS_PACKAGES="less cron libzstd1 libtidy5deb1 libsnmp30 unzip libmagickcore-6.q16-6-extra"
+OS_PACKAGES="less libzstd1 libtidy5deb1 libsnmp30 unzip libmagickcore-6.q16-6-extra busybox-static"
 OS_PACKAGES_TEMP="libbz2-dev libldap2-dev libzstd-dev libicu-dev libsnmp-dev libtidy-dev"
 # ToDo add libmagickcore-dev libmagickwand-dev as soon as compatible with php8
 PHP_MODULES="opcache bz2 ldap intl calendar pcntl snmp sysvmsg sysvsem sysvshm tidy"
@@ -97,13 +97,11 @@ chown -R www-data:www-data .
 popd
 
 
-### wordpress cron (insert cronjob in entrypoint)
+### wordpress cron (insert cron in entrypoint)
+mkdir -p /var/spool/cron/crontabs
+echo '*/5 * * * * php -f /var/www/html/wp-cron.php' > /var/spool/cron/crontabs/www-data
 sed -i -e '/^exec/i exec /usr/local/bin/docker-cron.sh &' /usr/local/bin/docker-entrypoint.sh
-chmod u+x /usr/local/bin/docker-cron.sh
-chown root:root /usr/local/etc/wordpress_cron
-chmod 640 /usr/local/etc/wordpress_cron
-ln -s /usr/local/etc/wordpress_cron /etc/cron.d/wordpress_cron
-
+chmod +x /usr/local/bin/docker-cron.sh
 
 
 ### CLEANUP

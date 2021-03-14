@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-exec cron -f -L 15 -l
+set -eu
+
+exec busybox crond -f -l 0 -L /dev/stdout
