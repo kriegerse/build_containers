@@ -1,0 +1,92 @@
+---
+build-wordpress:
+  stage: build
+  script:
+    - source build_info.sh
+    - docker build --network host -f wordpress/Dockerfile
+      --build-arg FS_BASE=wordpress
+      -t $docker_username/wordpress-stage:$BUILD_PRIMARY_TAG .
+    - docker push $docker_username/wordpress-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $BUILD_SECONDARY_TAGS ; do
+        docker tag $docker_username/wordpress-stage:$BUILD_PRIMARY_TAG
+        $docker_username/wordpress-stage:$i ;
+        docker push $docker_username/wordpress-stage:$i ; done
+  rules:
+    # run on PR when changes on files
+    - if: $CI_MERGE_REQUEST_ID
+      changes:
+        - wordpress/*
+        - wordpress/**/*
+    # run on branches other than master when changes on files
+    - if: $CI_COMMIT_BRANCH != 'master'
+      changes:
+        - wordpress/*
+        - wordpress/**/*
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE == 'web'
+    # run on schedules for wordpress
+    - if: $schedule_job == 'wordpress'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - wordpress/*
+        - wordpress/**/*
+
+
+test-wordpress:
+  stage: test
+  needs:
+    - job: build-wordpress
+    - job: prepare-build-info
+      artifacts: true
+  script:
+    - apk add bash jq curl
+    - source build_info.sh
+    - bash wordpress/tests/wordpress_test.sh
+  rules:
+    # run on PR when changes on files
+    - if: $CI_MERGE_REQUEST_ID
+      changes:
+        - wordpress/*
+        - wordpress/**/*
+    # run on branches other than master when changes on files
+    - if: $CI_COMMIT_BRANCH != 'master'
+      changes:
+        - wordpress/*
+        - wordpress/**/*
+    # run on schedules or web frontend
+    - if: $CI_PIPELINE_SOURCE == 'web'
+    # run on schedules for wordpress
+    - if: $schedule_job == 'wordpress'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - wordpress/*
+        - wordpress/**/*
+
+
+publish-wordpress:
+  stage: publish
+  needs:
+    - job: test-wordpress
+    - job: prepare-build-info
+      artifacts: true
+  script:
+    - source build_info.sh
+    - docker pull $docker_username/wordpress-stage:$BUILD_PRIMARY_TAG
+    - docker image ls
+    - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
+        docker tag $docker_username/wordpress-stage:$BUILD_PRIMARY_TAG
+        $docker_username/wordpress:$i ;
+        docker push $docker_username/wordpress:$i ; done
+  rules:
+    # run on web frontend and if branch master
+    - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
+    # run on schedules for clamav and if branch master
+    - if: $schedule_job == 'wordpress' && $CI_COMMIT_BRANCH == 'master'
+    # run on master when changes on files (e.g. after merge)
+    - if: $CI_COMMIT_BRANCH == 'master'
+      changes:
+        - wordpress/*
+        - wordpress/**/*
