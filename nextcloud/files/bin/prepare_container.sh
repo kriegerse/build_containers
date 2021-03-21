@@ -9,7 +9,7 @@ OS_PACKAGES_TEMP="libbz2-dev libc-client-dev libkrb5-dev libsmbclient-dev"
 NC_APPS="apporder bookmarks calendar contacts deck files_accesscontrol
 files_antivirus files_automatedtagging files_downloadactivity files_markdown
 files_mindmap keeweb metadata news notes previewgenerator
-tasks twofactor_totp files_retention"
+tasks twofactor_totp files_retention richdocuments"
 
 ### install additional libraries + tools ###
 apt-get update
