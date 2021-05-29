@@ -65,6 +65,17 @@ cd /usr/src/nextcloud/config
 mv apps.config.php_orig apps.config.php
 rm config.php
 rm -rf /tmp/nc_data /usr/src/nextcloud/data/*
+find /usr/src/nextcloud/apps/notify_push/bin/* -not -path "*$(arch)*" -delete || true 
+
+
+# precopy to /var/www/html 
+if [ "$(id -u)" = 0 ]; then
+  rsync_options="-rlDog --chown www-data:root"
+else
+  rsync_options="-rlD"
+fi
+rsync $rsync_options --delete --exclude-from=/upgrade.exclude /usr/src/nextcloud/ /var/www/html/
+
 
 ### self cleanup ###
 apt-get clean -y
