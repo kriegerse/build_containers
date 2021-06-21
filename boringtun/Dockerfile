@@ -8,9 +8,7 @@ ARG FS_BASE=''
 COPY --from=builder /usr/local/bin/boringtun /usr/local/bin/
 COPY ./${FS_BASE}/files/bin  /usr/local/bin/.
 
-RUN zypper -vvv -n ar --gpgcheck --refresh -f obs://network:vpn:wireguard wireguard \
-    && zypper -vvv -n --gpg-auto-import-keys refresh \
-    && zypper -vvv -n in wireguard-tools iproute2 iputils iptables bash-completion \
+RUN zypper -vvv -n in wireguard-tools iproute2 iputils iptables bash-completion \
     && zypper -vvv -n clean --all \
     && chmod -v +x /usr/local/bin/*
 
