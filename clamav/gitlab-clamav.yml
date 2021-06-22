@@ -74,7 +74,7 @@ include:
   - template: Security/Container-Scanning.gitlab-ci.yml
 
 container_scanning:
-  before_script:
+  before_script: []
   variables:
     DOCKER_USER: $docker_username
     DOCKER_PASSWORD: $docker_password
