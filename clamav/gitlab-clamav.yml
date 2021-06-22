@@ -86,27 +86,27 @@ container_scanning:
     SECURE_LOG_LEVEL: debug
 
 
-publish-clamav:
-  stage: publish
-  needs:
-    - job: test-clamav
-    - job: prepare-build-info
-      artifacts: true
-  script:
-    - source build_info.sh
-    - docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-    - docker image ls
-    - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
-        docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-        $docker_username/clamav:$i ;
-        docker push $docker_username/clamav:$i ; done
-  rules:
-    # run on web frontend and if branch master
-    - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
-    # run on schedules for clamav and if branch master
-    - if: $schedule_job == 'clamav' && $CI_COMMIT_BRANCH == 'master'
-    # run on master when changes on files (e.g. after merge)
-    - if: $CI_COMMIT_BRANCH == 'master'
-      changes:
-        - clamav/*
-        - clamav/**/*
+# publish-clamav:
+#   stage: publish
+#   needs:
+#     - job: test-clamav
+#     - job: prepare-build-info
+#       artifacts: true
+#   script:
+#     - source build_info.sh
+#     - docker pull $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+#     - docker image ls
+#     - for i in $RELEASE_PRIMARY_TAG $RELEASE_SECONDARY_TAGS ; do
+#         docker tag $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+#         $docker_username/clamav:$i ;
+#         docker push $docker_username/clamav:$i ; done
+#   rules:
+#     # run on web frontend and if branch master
+#     - if: $CI_PIPELINE_SOURCE == 'web' && $CI_COMMIT_BRANCH == 'master'
+#     # run on schedules for clamav and if branch master
+#     - if: $schedule_job == 'clamav' && $CI_COMMIT_BRANCH == 'master'
+#     # run on master when changes on files (e.g. after merge)
+#     - if: $CI_COMMIT_BRANCH == 'master'
+#       changes:
+#         - clamav/*
+#         - clamav/**/*
