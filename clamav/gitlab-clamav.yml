@@ -79,6 +79,8 @@ container_scanning:
   before_script:
     - env
     - ps -efwww
+    - ls -alhtr /var/run
+    - ls -alhtr /var/run/docker
   variables:
     GIT_STRATEGY: fetch
     DOCKER_HOST: tcp://localhost:2376
