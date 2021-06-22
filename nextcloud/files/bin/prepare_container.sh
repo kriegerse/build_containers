@@ -60,6 +60,9 @@ php occ app:install --keep-disabled -vvv notify_push || true
 # Error: The "unique" column option is not supported.
 php occ app:install --keep-disabled -vvv maps || true
 
+# add cron entry for previewgenerator 
+echo '*/20 * * * * php -f /var/www/html/occ preview:pre-generate -vvv' >> /var/spool/cron/crontabs/www-data 
+
 # restore saved config and cleanup
 cd /usr/src/nextcloud/config
 mv apps.config.php_orig apps.config.php
