@@ -79,7 +79,7 @@ container_scanning:
     - ps -efwww
   variables:
     GIT_STRATEGY: fetch
-    # DOCKER_HOST: tcp://127.0.0.1:2376
+    DOCKER_HOST: tcp://localhost:2376
     DOCKER_USER: $docker_username
     DOCKER_PASSWORD: $docker_password
     # DOCKER_IMAGE: $docker_username/clamav-stage:$CI_COMMIT_SHORT_SHA
