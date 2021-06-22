@@ -89,7 +89,7 @@ grype-scan-clamav:
   allow_failure: true
   artifacts:
     reports:
-      container_scanning: gl-container-scanning-report-grype.json
+      container_scanning: gl-container-scanning-report.json
     paths: [gl-container-scanning-report.json]
   dependencies: []
   script:
@@ -120,7 +120,7 @@ trivy-scan-clamav:
   allow_failure: true
   artifacts:
     reports:
-      container_scanning: gl-container-scanning-report-trivy.json
+      container_scanning: gl-container-scanning-report.json
     paths: [gl-container-scanning-report.json]
   dependencies: []
   script:
