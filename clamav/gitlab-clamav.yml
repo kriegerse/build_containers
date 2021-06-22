@@ -76,11 +76,11 @@ include:
 container_scanning:
   before_script: []
   variables:
+    CS_ANALYZER_IMAGE: registry.gitlab.com/security-products/container-scanning/grype:4
     GIT_STRATEGY: fetch
     DOCKER_USER: $docker_username
     DOCKER_PASSWORD: $docker_password
     DOCKER_IMAGE: $docker_username/clamav-stage:commit-$CI_COMMIT_SHORT_SHA
-    # DOCKER_IMAGE: $docker_username/clamav-stage:commit-9e6f9838
     DOCKERFILE_PATH: clamav/Dockerfile
     SECURE_LOG_LEVEL: debug
 
