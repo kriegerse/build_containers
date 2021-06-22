@@ -73,9 +73,13 @@ test-clamav:
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
 
-variables:
-  DOCKER_IMAGE: $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
-  SECURE_LOG_LEVEL: debug
+container_scanning:
+  before_script:
+  variables:
+    DOCKER_USER: $docker_username
+    DOCKER_PASSWORD: $docker_password
+    DOCKER_IMAGE: $docker_username/clamav-stage:$BUILD_PRIMARY_TAG
+    SECURE_LOG_LEVEL: debug
 
 
 publish-clamav:
