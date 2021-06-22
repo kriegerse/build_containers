@@ -81,11 +81,11 @@ container_scanning:
     - ls -alhtr /var/run
   variables:
     GIT_STRATEGY: fetch
-    DOCKER_HOST: tcp://localhost:2376
+    # DOCKER_HOST: tcp://localhost:2376
     DOCKER_USER: $docker_username
     DOCKER_PASSWORD: $docker_password
     # DOCKER_IMAGE: $docker_username/clamav-stage:$CI_COMMIT_SHORT_SHA
-    DOCKER_IMAGE: $docker_username/clamav-stage:9e6f9838
+    DOCKER_IMAGE: $docker_username/clamav-stage:commit-9e6f9838
     DOCKERFILE_PATH: clamav/Dockerfile
     SECURE_LOG_LEVEL: debug
 
