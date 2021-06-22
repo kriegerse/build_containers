@@ -74,13 +74,11 @@ include:
   - template: Security/Container-Scanning.gitlab-ci.yml
 
 container_scanning:
-  services:
-    - docker:dind
+  services: []
   before_script:
     - env
     - ps -efwww
     - ls -alhtr /var/run
-    - ls -alhtr /var/run/docker
   variables:
     GIT_STRATEGY: fetch
     DOCKER_HOST: tcp://localhost:2376
