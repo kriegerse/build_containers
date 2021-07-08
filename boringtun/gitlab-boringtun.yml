@@ -64,6 +64,13 @@ test-boringtun:
         - boringtun/*
         - boringtun/**/*
 
+# include:
+#   - template: Security/Container-Scanning.gitlab-ci.yml
+#
+# variables:
+#   DOCKER_IMAGE: $docker_username/boringtun-stage:$BUILD_PRIMARY_TAG
+#   SECURE_LOG_LEVEL: debug
+
 publish-boringtun:
   stage: publish
   needs:

@@ -70,6 +70,81 @@ test-clamav:
         - clamav/**/*
 
 
+grype-scan-clamav:
+  stage: test
+  needs:
+    - job: build-clamav
+    - job: prepare-build-info
+      artifacts: true
+  before_script: []
+  image: "$CS_ANALYZER_IMAGE"
+  variables:
+    CS_ANALYZER_IMAGE:
+      registry.gitlab.com/security-products/container-scanning/grype:4
+    GIT_STRATEGY: fetch
+    DOCKER_USER: $docker_username
+    DOCKER_PASSWORD: $docker_password
+    DOCKER_IMAGE: $docker_username/clamav-stage:commit-$CI_COMMIT_SHORT_SHA
+    DOCKERFILE_PATH: clamav/Dockerfile
+  allow_failure: true
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
+    paths: [gl-container-scanning-report.json]
+  dependencies: []
+  script:
+    - gtcs scan
+  rules:
+    - if: $CONTAINER_SCANNING_DISABLED
+      when: never
+    - if: $CI_COMMIT_BRANCH &&
+          $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
+
+
+trivy-scan-clamav:
+  stage: test
+  needs:
+    - job: build-clamav
+    - job: prepare-build-info
+      artifacts: true
+  before_script: []
+  image: "$CS_ANALYZER_IMAGE"
+  variables:
+    CS_ANALYZER_IMAGE:
+      registry.gitlab.com/security-products/container-scanning/trivy:4
+    GIT_STRATEGY: fetch
+    DOCKER_USER: $docker_username
+    DOCKER_PASSWORD: $docker_password
+    DOCKER_IMAGE: $docker_username/clamav-stage:commit-$CI_COMMIT_SHORT_SHA
+    DOCKERFILE_PATH: clamav/Dockerfile
+  allow_failure: true
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
+    paths: [gl-container-scanning-report.json]
+  dependencies: []
+  script:
+    - gtcs scan
+  rules:
+    - if: $CONTAINER_SCANNING_DISABLED
+      when: never
+    - if: $CI_COMMIT_BRANCH &&
+          $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
+
+
+# container_scanning:
+#   before_script: []
+#   variables:
+#     CS_ANALYZER_IMAGE:
+#       registry.gitlab.com/security-products/container-scanning/grype:4
+#     GIT_STRATEGY: fetch
+#     DOCKER_USER: $docker_username
+#     DOCKER_PASSWORD: $docker_password
+#     DOCKER_IMAGE: $docker_username/clamav-stage:commit-$CI_COMMIT_SHORT_SHA
+#     DOCKERFILE_PATH: clamav/Dockerfile
+#     SECURE_LOG_LEVEL: debug
+
+
 publish-clamav:
   stage: publish
   needs:
